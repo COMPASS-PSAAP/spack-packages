@@ -1,0 +1,4 @@
+# Define the namespace for COMPASS packages
+repo:
+  namespace: compass
+  api: v1.0 # Or newer
