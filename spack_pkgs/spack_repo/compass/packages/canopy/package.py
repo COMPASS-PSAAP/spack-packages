@@ -78,19 +78,19 @@ class Canopy(CMakePackage, CudaPackage, ROCmPackage):
         # Use hipcc as the c compiler if we are compiling for rocm. Doing it this way
         # keeps the wrapper insted of changeing CMAKE_CXX_COMPILER keeps the spack wrapper
         # and the rpaths it sets for us from the underlying spec.
-        if self.spec.satisfies("+rocm"):
-            options.append(self.define("CMAKE_CXX_COMPILER", self.spec["hip"].hipcc))
+        # if self.spec.satisfies("+rocm"):
+            # options.append(self.define("CMAKE_CXX_COMPILER", self.spec["hip"].hipcc))
 
         # If we're building with cray mpich, we need to make sure we get the GTL library for
         # gpu-aware MPI
-        if self.spec.satisfies("+rocm ^cray-mpich"):
-            gtl_dir = join_path(self.spec["cray-mpich"].prefix, "..", "..", "..", "gtl", "lib")
-            options.append(
-                "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath={0} -L{0} -lmpi_gtl_hsa".format(gtl_dir)
-            )
-        elif self.spec.satisfies("+cuda ^cray-mpich"):
-            gtl_dir = join_path(self.spec["cray-mpich"].prefix, "..", "..", "..", "gtl", "lib")
-            options.append(
-                "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath={0} -L{0} -lmpi_gtl_cuda".format(gtl_dir)
-            )
+        # if self.spec.satisfies("+rocm ^cray-mpich"):
+            # gtl_dir = join_path(self.spec["cray-mpich"].prefix, "..", "..", "..", "gtl", "lib")
+            # options.append(
+                # "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath={0} -L{0} -lmpi_gtl_hsa".format(gtl_dir)
+            # )
+        # elif self.spec.satisfies("+cuda ^cray-mpich"):
+            # gtl_dir = join_path(self.spec["cray-mpich"].prefix, "..", "..", "..", "gtl", "lib")
+            # options.append(
+                # "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath={0} -L{0} -lmpi_gtl_cuda".format(gtl_dir)
+            # )
         return options
