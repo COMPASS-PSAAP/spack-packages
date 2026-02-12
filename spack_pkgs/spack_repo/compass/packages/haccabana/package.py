@@ -58,7 +58,7 @@ class Haccabana(CMakePackage):
         options = [self.define_from_variant("BUILD_SHARED_LIBS", "shared")]
 
         enable = []
-        require = ["CANOPY]
+        require = ["CANOPY"]
 
         for category, cname in zip([enable, require], ["ENABLE", "REQUIRE"]):
             for var in category:
