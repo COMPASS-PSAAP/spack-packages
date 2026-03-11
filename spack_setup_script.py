@@ -6,6 +6,7 @@ import sys
 import shutil
 import hashlib
 import subprocess
+import re
 from pathlib import Path
 
 def get_sha1(filepath):
@@ -22,13 +23,12 @@ def main():
         epilog="""\
 Notes:
   -R: It is a good idea to check in all code in "spack develop" before running this command!
-  -S: This value is required if $CLUSTER is not set. This is destructive and will override 
-      any local adjustments to your system packages and/or repo package.yaml files!
+  -S: This is destructive and will override any local adjustments to your system packages and/or repo package.yaml files!
 """
     )
     parser.add_argument('-U', action='store_true', help='Do a "git pull" before installing.')
     parser.add_argument('-R', action='store_true', help='Install custom CUP-ECS and COMPASS Spack package repositories.')
-    parser.add_argument('-S', dest='system', help='Provide this value if you wish to install for a value different than what is in $CLUSTER.')
+    parser.add_argument('-S', dest='system', help='The name of the cluster to setup files for. For example, "-S $CLUSTER" ')
     parser.add_argument('-E', dest='profile_file', help='Automatically source Spack setup upon log in by modifying this profile file (e.g., .bashrc).')
     
     args = parser.parse_args()
@@ -96,6 +96,11 @@ Notes:
         print("No spack installed -- stopping")
         sys.exit(1)
 
+    # 8b Get true path 
+    matches = re.findall(r'/[^ ;]+\.sh', spack_exe)
+    full_path = matches[-1] if matches else None
+    print(full_path)
+
     # 9. Setup Spack repositories
     if spack_repo_setup:
         print("Removing old spack repositories")
@@ -113,7 +118,7 @@ Notes:
             print(f"{profile_path} does not exist -- stopping")
             sys.exit(1)
 
-        string_to_add = "export SPACK_USER_CONFIG_PATH=$HOME/.spack/$CLUSTER"
+        strings_to_add = ["export SPACK_USER_CONFIG_PATH=$HOME/.spack/$CLUSTER", f"source {spack_exe} " ]
         
         # Read existing content to check if string is already present
         with open(profile_path, 'r') as f:
