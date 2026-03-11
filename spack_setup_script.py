@@ -106,7 +106,7 @@ Notes:
 
     # 6. Update git repository
     if get_update:
-        print(f"{blue}Pulling latest code")
+        print(f"{blue}Pulling latest code:{black}")
         subprocess.run(["git", "pull"], check=True)
 
     # 7. Stop here if Spack-specific actions are not requested
@@ -124,7 +124,7 @@ Notes:
 
     # 9. Setup Spack repositories
     if spack_repo_setup:
-        print(f"{green}Removing old spack repositories:{black}")
+        print(f"{green}Reestablishing Spack repositories:{black}")
         repos_to_process = ["cupecs", "compass"]
 
         for repo in repos_to_process:
@@ -165,7 +165,7 @@ Notes:
                     f.write(f"\n{string_to_add}\n")
             else:
                 print(
-                    f'{blue}"{string_to_add}" already present in requested file. Skipping.{black}'
+                    f'{blue}{string_to_add}" already present in requested file. Skipping.{black}'
                 )
 
 
