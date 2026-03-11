@@ -92,7 +92,7 @@ Notes:
     # 6. Install system-specific packages.yaml
     target_file = install_location / "packages.yaml"
     need_new_file = False
-    
+
     # 6a. Check if file is present and needs updating
     if target_file.is_file():
         hash1 = get_sha1(install_file)
@@ -109,6 +109,8 @@ Notes:
     if need_new_file:
         print(f"{green}Installing {install_file} to {install_location}{black}")
         shutil.copy2(install_file, install_location)
+    else:
+        print(f'{blue}No new "package.yaml" file installed.')
 
     # 7. Stop here if Spack-specific actions are not requested
     if not want_spack:
