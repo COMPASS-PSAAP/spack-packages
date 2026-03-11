@@ -62,7 +62,12 @@ Notes:
     # We only need spack if -R or -E is used
     want_spack = spack_repo_setup or bool(profile_file)
 
-    # 2. Check for CLUSTER availability
+    # 2. Update git repository
+    if get_update:
+        print(f"{blue}Pulling latest code:{black}")
+        subprocess.run(["git", "pull"], check=True)
+
+    # 3. Check for CLUSTER availability
     if not cluster:
         print(f"{red}No system specified -- exiting.{black}")
         sys.exit(1)
@@ -70,12 +75,12 @@ Notes:
     cwd = Path.cwd()
     cluster_dir = cwd / "system_externals" / cluster
 
-    # 3. Check if we know about the cluster
+    # 4. Check if we know about the cluster
     if not cluster_dir.is_dir():
         print(f"{red}No packages for system -- exiting.{black}")
         sys.exit(1)
 
-    # 4. Setup install directories
+    # 5. Setup install directories
     install_file = cluster_dir / "packages.yaml"
     home = Path.home()
     install_location = home / ".spack" / cluster
@@ -84,10 +89,11 @@ Notes:
         print(f"{green}Making folder for {cluster} external/system packages{black}")
         install_location.mkdir(parents=True, exist_ok=True)
 
-    # 5. Check if file is present and needs updating
+    # 6. Install system-specific packages.yaml
     target_file = install_location / "packages.yaml"
     need_new_file = False
-
+    
+    # 6a. Check if file is present and needs updating
     if target_file.is_file():
         hash1 = get_sha1(install_file)
         hash2 = get_sha1(target_file)
@@ -99,15 +105,10 @@ Notes:
     else:
         need_new_file = True
 
-    # Install the package file if needed
+    # 6b. Install the package file, if needed
     if need_new_file:
         print(f"{green}Installing {install_file} to {install_location}{black}")
         shutil.copy2(install_file, install_location)
-
-    # 6. Update git repository
-    if get_update:
-        print(f"{blue}Pulling latest code:{black}")
-        subprocess.run(["git", "pull"], check=True)
 
     # 7. Stop here if Spack-specific actions are not requested
     if not want_spack:
