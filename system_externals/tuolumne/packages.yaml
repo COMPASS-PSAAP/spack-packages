@@ -1,3 +1,5 @@
+# Tuolumne packages.yaml
+# Version 1.0
 packages:
   ##################################################################
   # General variants we always want on this system
@@ -484,6 +486,13 @@ packages:
     externals:
     - prefix: /opt/rocm-6.4.2
       spec: roctracer-dev@6.4.2
+  papi:
+    buildable: false
+    externals:
+    - modules:
+      - papi/7.2.0.2
+      spec: papi@7.2.0.2
+    version: [7.2.0.2]
   #########################################################
   # Stuff we need for building on this system in particular
   #########################################################

@@ -1,4 +1,11 @@
+# Dane packages.yaml
+# Version 1.0
 packages:
+  bzip2:
+    buildable: false
+    externals:
+    - spec: bzip2@1.0.6
+      prefix: /usr/bin
   cmake:
     buildable: false
     externals:
@@ -6,13 +13,6 @@ packages:
       prefix: /usr/tce/packages/cmake/cmake-3.30.5/
   gcc:
     externals:
-    - spec: gcc@8.5.0 languages:='c,c++,fortran'
-      prefix: /usr
-      extra_attributes:
-        compilers:
-          c: /usr/bin/gcc
-          cxx: /usr/bin/g++
-          fortran: /usr/bin/gfortran
     - spec: gcc@10.3.1 languages:='c,c++,fortran'
       prefix: /usr/tce
       extra_attributes:
@@ -27,11 +27,21 @@ packages:
           c: /usr/tce/packages/gcc/gcc-13.3.1-magic/bin/gcc
           cxx: /usr/tce/packages/gcc/gcc-13.3.1-magic/bin/g++
           fortran: /usr/tce/packages/gcc/gcc-13.3.1-magic/bin/gfortran
+  gettext:
+    buildable: false
+    externals:
+    - spec: gettext@0.19.8.1
+      prefix: /usr/bin
   hdf5:
     buildable: false
     externals:
     - spec: hdf5@1.14.0 +mpi %gcc@13.3.1
       prefix: hdf5-1.14.0-mvapich2-2.3.7-gcc-13.3.1/
+  libtool:
+    buildable: false
+    externals:
+    - spec: libtool@2.4.6
+      prefix: /usr/bin
   llvm:
     externals:
     - spec: llvm@19.1.7+clang~flang+lld+lldb
@@ -46,6 +56,11 @@ packages:
         compilers:
           c: /usr/lib64/ccache/clang
           cxx: /usr/lib64/ccache/clang++
+  m4:
+    buildable: false
+    externals:
+    - spec: m4@1.4.18
+      prefix: /usr/bin
   mvapich2:
     buildable: false
     externals:
@@ -56,4 +71,32 @@ packages:
     externals:
     - spec: openmpi@4.1.2 %gcc@13.3.1
       prefix: /usr/tce/packages/openmpi/openmpi-4.1.2-gcc-13.3.1-magic/
-      
+  papi:
+    buildable: false
+    externals:
+    - modules:
+      - papi/6.0.0.1
+      spec: papi@6.0.0.1
+    version: [6.0.0.1]
+  pkgconf:
+    buildable: false
+    externals:
+    - spec: pkgconf@1.4.2
+      prefix: /usr/bin
+  python:
+    buildable: false
+    externals:
+    - modules:
+      - python/3.13.2
+      spec: python@3.13.2
+    version: [3.13.2]
+  xz:
+    buildable: false
+    externals:
+    - spec: xz@5.2.4
+      prefix: /usr/bin
+  zstd:
+    buildable: false
+    externals:
+    - spec: zstd@1.4.4
+      prefix: /usr/bin
