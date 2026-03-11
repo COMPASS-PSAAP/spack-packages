@@ -1,0 +1,59 @@
+packages:
+  cmake:
+    buildable: false
+    externals:
+    - spec: cmake@3.30.5
+      prefix: /usr/tce/packages/cmake/cmake-3.30.5/
+  gcc:
+    externals:
+    - spec: gcc@8.5.0 languages:='c,c++,fortran'
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/gcc
+          cxx: /usr/bin/g++
+          fortran: /usr/bin/gfortran
+    - spec: gcc@10.3.1 languages:='c,c++,fortran'
+      prefix: /usr/tce
+      extra_attributes:
+        compilers:
+          c: /usr/tce/bin/gcc
+          cxx: /usr/tce/bin/g++
+          fortran: /usr/tce/bin/gfortran
+    - spec: gcc@13.3.1 languages:='c,c++,fortran'
+      prefix: /usr/tce/packages/gcc/gcc-13.3.1-magic
+      extra_attributes:
+        compilers:
+          c: /usr/tce/packages/gcc/gcc-13.3.1-magic/bin/gcc
+          cxx: /usr/tce/packages/gcc/gcc-13.3.1-magic/bin/g++
+          fortran: /usr/tce/packages/gcc/gcc-13.3.1-magic/bin/gfortran
+  hdf5:
+    buildable: false
+    externals:
+    - spec: hdf5@1.14.0 +mpi %gcc@13.3.1
+      prefix: hdf5-1.14.0-mvapich2-2.3.7-gcc-13.3.1/
+  llvm:
+    externals:
+    - spec: llvm@19.1.7+clang~flang+lld+lldb
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/clang
+          cxx: /usr/bin/clang++
+    - spec: llvm@19.1.7+clang~flang~lld~lldb
+      prefix: /usr/lib64/ccache
+      extra_attributes:
+        compilers:
+          c: /usr/lib64/ccache/clang
+          cxx: /usr/lib64/ccache/clang++
+  mvapich2:
+    buildable: false
+    externals:
+    - spec: mvapich2@2.3.7 %gcc@13.3.1
+      prefix: /usr/tce/packages/mvapich2/mvapich2-2.3.7-gcc-13.3.1-magic/
+  openmpi:
+    buildable: false
+    externals:
+    - spec: openmpi@4.1.2 %gcc@13.3.1
+      prefix: /usr/tce/packages/openmpi/openmpi-4.1.2-gcc-13.3.1-magic/
+      
