@@ -6,7 +6,6 @@ import sys
 import shutil
 import hashlib
 import subprocess
-import re
 from pathlib import Path
 
 def get_sha1(filepath):
@@ -97,9 +96,7 @@ Notes:
         sys.exit(1)
 
     # 8b Get true path 
-    matches = re.findall(r'/[^ ;]+\.sh', spack_exe)
-    full_path = matches[-1] if matches else None
-    print(full_path)
+    full_path = spack_exe.replace("bin/spack","share/spack/setup-env.sh")
 
     # 9. Setup Spack repositories
     if spack_repo_setup:
@@ -118,18 +115,19 @@ Notes:
             print(f"{profile_path} does not exist -- stopping")
             sys.exit(1)
 
-        strings_to_add = ["export SPACK_USER_CONFIG_PATH=$HOME/.spack/$CLUSTER", f"source {spack_exe} " ]
+        strings_to_add = ["export SPACK_USER_CONFIG_PATH=$HOME/.spack/$CLUSTER", f"source {full_path}" ]
         
-        # Read existing content to check if string is already present
-        with open(profile_path, 'r') as f:
-            lines = [line.strip() for line in f.readlines()]
+        for string_to_add in strings_to_add:
+            # Read existing content to check if string is already present
+            with open(profile_path, 'r') as f:
+                lines = [line.strip() for line in f.readlines()]
 
-        if string_to_add not in lines:
-            print(f'Adding "{string_to_add}" to "{profile_path}".')
-            with open(profile_path, 'a') as f:
-                f.write(f"\n{string_to_add}\n")
-        else:
-            print("Spack variable already present")
+            if string_to_add not in lines:
+                print(f'Adding "{string_to_add}" to "{profile_path}".')
+                with open(profile_path, 'a') as f:
+                    f.write(f"\n{string_to_add}\n")
+            else:
+                print("Spack variable already present")
 
 if __name__ == "__main__":
     main()
