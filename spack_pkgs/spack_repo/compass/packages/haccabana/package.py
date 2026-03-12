@@ -9,7 +9,7 @@ from spack_repo.builtin.build_systems.rocm import ROCmPackage
 from spack.package import *
 
 
-class Haccabana(CMakePackage):
+class Haccabana(CMakePackage, CudaPackage, ROCmPackage):
     """HACCabana: A proxy app for HACC short range forces.
     The Hardware/Hybrid Accelerated Cosmology Code (HACC), a cosmology
     N-body-code framework, is designed to run efficiently on diverse computing
@@ -37,7 +37,7 @@ class Haccabana(CMakePackage):
     depends_on("cxx", type="build")
 
     depends_on("cmake@3.9:", type="build")
-    depends_on("kokkos@3.0:")
+    depends_on("kokkos@4.0:")
     depends_on("cabana@master")
 
     conflicts("+cuda", when="cuda_arch=none")
