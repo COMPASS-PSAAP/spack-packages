@@ -31,6 +31,10 @@ def main():
 Notes:
   -R: It is a good idea to check in all code in "spack develop" before running this command!
   -S: This is destructive and will override any local adjustments to your system packages and/or repo package.yaml files!
+  -E: This command is currently setup to add a LLNL specific command to the provided file. If not on an LLNL machine, please
+      remove this line (or set the appropriate variable to the file).
+      This command also wants the path to the file from $HOME, not the current directory.
+  -C with -E: Will not write "export SPACK_USER_CONFIG_PATH=< >" to the specified file.
 """,
     )
     parser.add_argument(
@@ -40,6 +44,11 @@ Notes:
         "-R",
         action="store_true",
         help="Install custom CUP-ECS and COMPASS Spack package repositories.",
+    )
+    parser.add_argument(
+        "-C",
+        action="store_true",
+        help="Use SPACK_USER_CONFIG_PATH environment variable for install location of the system packages file.",
     )
     parser.add_argument(
         "-S",
@@ -54,16 +63,11 @@ Notes:
 
     args = parser.parse_args()
 
-    get_update = args.U
-    spack_repo_setup = args.R
     profile_file = args.profile_file
     cluster = args.system or os.environ.get("CLUSTER")
 
-    # We only need spack if -R or -E is used
-    want_spack = spack_repo_setup or bool(profile_file)
-
     # 2. Update git repository
-    if get_update:
+    if args.U:
         print(f"{blue}Pulling latest code:{black}")
         subprocess.run(["git", "pull"], check=True)
 
@@ -83,10 +87,22 @@ Notes:
     # 5. Setup install directories
     install_file = cluster_dir / "packages.yaml"
     home = Path.home()
-    install_location = home / ".spack" / cluster
+    # 5a. Determine location to install to
+    if args.C:
+        env_config_path = os.environ.get("SPACK_USER_CONFIG_PATH")
+        if not env_config_path:
+            print(
+                f"{red}-C flag provided, but SPACK_USER_CONFIG_PATH is not set in the environment -- exiting.{black}"
+            )
+            sys.exit(1)
+        install_location = Path(env_config_path)
+    else:
+        install_location = home / ".spack" / cluster
 
     if not install_location.is_dir():
-        print(f"{green}Making folder for {cluster} external/system packages{black}")
+        print(
+            f"{green}Making folder for {cluster} external/system packages at {install_location}{black}"
+        )
         install_location.mkdir(parents=True, exist_ok=True)
 
     # 6. Install system-specific packages.yaml
@@ -110,23 +126,23 @@ Notes:
         print(f"{green}Installing {install_file} to {install_location}{black}")
         shutil.copy2(install_file, install_location)
     else:
-        print(f'{blue}No new "package.yaml" file installed.')
+        print(f'{blue}No new "package.yaml" file installed.{black}')
 
     # 7. Stop here if Spack-specific actions are not requested
-    if not want_spack:
+    if not (args.R or bool(profile_file)):
         sys.exit(0)
 
     # 8. Check for Spack installation
     spack_exe = shutil.which("spack")
     if not spack_exe:
-        print("No spack installed -- stopping")
+        print(f"{red}No spack installed -- stopping{black}")
         sys.exit(1)
 
     # 8b Get true path
     full_path = spack_exe.replace("bin/spack", "share/spack/setup-env.sh")
 
     # 9. Setup Spack repositories
-    if spack_repo_setup:
+    if args.R:
         print(f"{green}Reestablishing Spack repositories:{black}")
         repos_to_process = ["cupecs", "compass"]
 
@@ -152,12 +168,28 @@ Notes:
             print(f"{red}{profile_path} does not exist -- stopping{black}")
             sys.exit(1)
 
-        strings_to_add = [
-            "export SPACK_USER_CONFIG_PATH=$HOME/.spack/$CLUSTER",
-            f"source {full_path}",
+        # Structure strings to add alongside any flags that should cause them to be skipped
+        strings_to_process = [
+            {
+                "text": "export SPACK_USER_CONFIG_PATH=$HOME/.spack/$CLUSTER",
+                "conflicts_with": [args.C],  # Skips if -C is True
+            },
+            {
+                "text": f"source {full_path}",
+                "conflicts_with": [],  # Always writes if -E is used
+            },
         ]
 
-        for string_to_add in strings_to_add:
+        for item in strings_to_process:
+            # If any conflicting flag in the list is True, skip this string
+            if any(item["conflicts_with"]):
+                print(
+                    f"{blue}Skipping '{item['text']}' due to conflicting flag.{black}"
+                )
+                continue
+
+            string_to_add = item["text"]
+
             # Read existing content to check if string is already present
             with open(profile_path, "r") as f:
                 lines = [line.strip() for line in f.readlines()]
@@ -168,7 +200,7 @@ Notes:
                     f.write(f"\n{string_to_add}\n")
             else:
                 print(
-                    f'{blue}{string_to_add}" already present in requested file. Skipping.{black}'
+                    f'{blue}"{string_to_add}" already present in requested file. Skipping.{black}'
                 )
 
 
