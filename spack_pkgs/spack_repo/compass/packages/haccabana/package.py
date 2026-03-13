@@ -34,6 +34,7 @@ class Haccabana(CMakePackage, CudaPackage, ROCmPackage):
 
     variant("canopy", default=False, description="Fast multipole solver for far field forces")
 
+    depends_on("c", type="build")
     depends_on("cxx", type="build")
 
     depends_on("cmake@3.9:", type="build")
