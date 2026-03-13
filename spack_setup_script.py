@@ -35,6 +35,7 @@ Notes:
       remove this line (or set the appropriate variable to the file).
       This command also wants the path to the file from $HOME, not the current directory.
   -C with -E: Will not write "export SPACK_USER_CONFIG_PATH=< >" to the specified file.
+  -R, -E: These options require Spack to be available in the environment.
 """,
     )
     parser.add_argument(

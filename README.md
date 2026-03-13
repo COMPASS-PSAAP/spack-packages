@@ -11,7 +11,7 @@ python3 spack_setup_script.py -R -S $CLUSTER
 # Advanced Usage -- The file after "-E" depends on your setup
 python3 spack_setup_script.py -U -R -S $CLUSTER -E .bashrc
 ```
-We've set this script up with output messages that outline what it is doing, but the individual steps are also outlined in the python file itself. To update your local files with any potential updates, add the `-U` flag to have the script do a `git pull` before running. For more details on the flags, run with `--help`
+Some options require Spack to be loaded in the environment, so it is a good idea to make sure that it is loaded before you run this tool. We've set this script up with output messages that outline what it is doing, but the individual steps are also outlined in the python file itself. To update your local files with any potential updates, add the `-U` flag to have the script do a `git pull` before running. For more details on the flags, run with `--help`
 
 ## Manual Setup:
   1. Clone this repository.
