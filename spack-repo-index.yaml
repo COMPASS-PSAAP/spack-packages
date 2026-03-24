@@ -2,3 +2,4 @@
 repo_index:
   paths:
   - spack_pkgs/spack_repo/cupecs/
+  - spack_pkgs/spack_repo/compass/
