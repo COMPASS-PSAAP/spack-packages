@@ -13,7 +13,7 @@ python3 spack_setup_script.py -R -S $CLUSTER -E .bashrc
 # Getting Updates (-E is not needed, but can be added if not used before)
 python3 spack_setup_script.py -U -R -S $CLUSTER 
 ```
-Some options require Spack to be loaded in the environment, so it is a good idea to make sure that it is loaded before you run this tool. We've set this script up with output messages that outline what it is doing, but the individual steps are also outlined in the python file itself. To update your local files with any potential updates, add the `-U` flag to have the script do a `git pull` before running. Running with `-U` with `-R` will also request Spack to pull the updates for the package repositories provided by this project, though it will do nothing if `-R` has not been previous run without `-U`. For more details on the flags, run with `--help`
+Some options require Spack to be loaded in the environment, so it is a good idea to make sure that it is loaded before you run this tool. We've set this script up with output messages that outline what it is doing, but the individual steps are also outlined in the python file itself. To update your local files with any potential updates, add the `-U` flag to have the script do a `git pull` before running. In addition to updating this Git repository, running with `-U` with `-R` will also request Spack to pull the updates for the Spack package repositories provided by this project, though Spack will do nothing if `-R` has not been previously run without `-U`. For more details on the flags, run with `--help`
 
 ## Manual Setup:
   1. Set up your environment so that Spack is loaded.
