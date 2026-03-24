@@ -1,5 +1,5 @@
 # pack-packages.git/spack-repo-index.yaml
 repo_index:
   paths:
-  - spack_pkgs/spack_repo/cupecs/
-  - spack_pkgs/spack_repo/compass/
+  - spack_pkgs/spack_repo/cupecs
+  - spack_pkgs/spack_repo/compass
