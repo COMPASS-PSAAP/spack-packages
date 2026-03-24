@@ -6,30 +6,41 @@ This repository is a fork of the CUP-ECS PSAAP-III repo by the same name. The pa
 ## Automatic Setup:
 This project provides a helper script (`spack_setup_script.py`) that can take care of setting up system-specific package files as well as tweaking a few Spack settings for you. For the first run of the script, you will generally do something like the following (which is specific to an LLNL machine):
 ```bash
-# Basic Usage
+# Basic First-time Setup
 python3 spack_setup_script.py -R -S $CLUSTER
-# Advanced Usage -- The file after "-E" depends on your setup
-python3 spack_setup_script.py -U -R -S $CLUSTER -E .bashrc
+# Advanced First-time Setup -- The file after "-E" depends on your setup
+python3 spack_setup_script.py -R -S $CLUSTER -E .bashrc
+# Getting Updates (-E is not needed, but can be added if not used before)
+python3 spack_setup_script.py -U -R -S $CLUSTER 
 ```
-Some options require Spack to be loaded in the environment, so it is a good idea to make sure that it is loaded before you run this tool. We've set this script up with output messages that outline what it is doing, but the individual steps are also outlined in the python file itself. To update your local files with any potential updates, add the `-U` flag to have the script do a `git pull` before running. For more details on the flags, run with `--help`
+Some options require Spack to be loaded in the environment, so it is a good idea to make sure that it is loaded before you run this tool. We've set this script up with output messages that outline what it is doing, but the individual steps are also outlined in the python file itself. To update your local files with any potential updates, add the `-U` flag to have the script do a `git pull` before running. In addition to updating this Git repository, running with `-U` with `-R` will also request Spack to pull the updates for the Spack package repositories provided by this project, though Spack will do nothing if `-R` has not been previously run without `-U`. For more details on the flags, run with `--help`
 
 ## Manual Setup:
-  1. Clone this repository.
-  2. Clone Spack from https://github.com/spack/spack.
-  3. Set up your environment so that Spack is loaded.
-  4. Add the repositories to Spack by running:
+  1. Set up your environment so that Spack is loaded.
+  2. Point Spack to the git repo with this command:
 ```bash
-spack repo add /path/to/this/repo/spack_pkgs/spack_repo/cupecs
-spack repo add /path/to/this/repo/spack_pkgs/spack_repo/compass
+  # Note: "COMPASSRepo" will be the name to give to spack when doing "spack repo update" or "spack repo remove"
+  # The path at the end of this command may also be changed, if so desired.
+  spack repo add --name COMPASSRepo https://github.com/COMPASS-PSAAP/spack-packages.git ~/.spack/package_repos/COMPASS
 ```
-  5. Run `spack repo list` to verify Spack has found the package repositories correctly. The output should be similar to:
+  3. Run `spack repo list` to verify Spack has found the package _namespaces_ correctly. The output should be similar to:
 ```
-[+] compass    v1.0    /home/theta/git/spack-packages/spack_pkgs/spack_repo/compass
-[+] cupecs     v2.0    /home/theta/git/spack-packages/spack_pkgs/spack_repo/cupecs
-[+] builtin    v2.2    /home/theta/.spack/package_repos/fncqgg4/repos/spack_repo/builtin
+[+] cupecs     v2.0    /g/g16/derek/.spack/package_repos/COMPASS/spack_pkgs/spack_repo/cupecs
+[+] compass    v1.0    /g/g16/derek/.spack/package_repos/COMPASS/spack_pkgs/spack_repo/compass
+[+] builtin    v2.2    /g/g16/derek/.spack/package_repos/fncqgg4/repos/spack_repo/builtin
 ```
- 6. Use Spack normally. Spack will automatically find libraries included in this repository.
- 7. Copy the system package file from `system_externals` to the location your Spack install is set up to look at (i.e., the value of `SPACK_USER_CONFIG_PATH`.)
+ 4. Run `spack config get repos` to verify Spack has setup the external package _repository_ correctly. The output should be similar to:
+```yaml
+repos:
+  COMPASSRepo:
+    git: https://github.com/COMPASS-PSAAP/spack-packages.git
+    destination: /g/g16/derek/.spack/package_repos/COMPASS
+  builtin:
+    git: https://github.com/spack/spack-packages.git
+    branch: releases/v2025.11
+```
+ 5. Use Spack normally. Spack will automatically find libraries included in this repository.
+ 6. If Spack files for described packages already installed on the system are wanted, clone this repository and copy the system package file from `system_externals` to the location your Spack install is set up to look at (i.e., the value of `SPACK_USER_CONFIG_PATH`.) Be sure to reload/relog if doing this while Spack is active.
 
 
 ## Package Creation:

@@ -143,24 +143,25 @@ Notes:
     full_path = spack_exe.replace("bin/spack", "share/spack/setup-env.sh")
 
     # 9. Setup Spack repositories
-    if args.R:
-        print(f"{green}Reestablishing Spack repositories:{black}")
-        repos_to_process = ["cupecs", "compass"]
-
-        for repo in repos_to_process:
-            # Suppress errors on removal in case they don't exist yet
-            subprocess.run(
-                [spack_exe, "repo", "remove", f"{repo}"], stderr=subprocess.DEVNULL
-            )
-            subprocess.run(
-                [
-                    spack_exe,
-                    "repo",
-                    "add",
-                    str(cwd / "spack_pkgs" / "spack_repo" / f"{repo}"),
-                ],
-                check=True,
-            )
+    if args.U and args.R:
+        print(f"{green}Updating external COMPASS Spack repositories:{black}")
+        subprocess.run(
+            [spack_exe, "repo", "update", "COMPASSRepo"], stderr=subprocess.DEVNULL
+        )
+    elif args.R:
+        print(f"{green}Establishing external COMPASS Spack repositories:{black}")
+        subprocess.run(
+            [
+                spack_exe,
+                "repo",
+                "add",
+                "--name",
+                "COMPASSRepo",
+                "https://github.com/COMPASS-PSAAP/spack-packages.git",
+                "~/.spack/package_repos/COMPASS",
+            ],
+            stderr=subprocess.DEVNULL,
+        )
 
     # 10. Modify user profile
     if profile_file:
