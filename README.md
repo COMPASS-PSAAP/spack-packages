@@ -6,10 +6,12 @@ This repository is a fork of the CUP-ECS PSAAP-III repo by the same name. The pa
 ## Automatic Setup:
 This project provides a helper script (`spack_setup_script.py`) that can take care of setting up system-specific package files as well as tweaking a few Spack settings for you. For the first run of the script, you will generally do something like the following (which is specific to an LLNL machine):
 ```bash
-# Basic Usage
+# Basic First-time Setup
 python3 spack_setup_script.py -R -S $CLUSTER
-# Advanced Usage -- The file after "-E" depends on your setup
-python3 spack_setup_script.py -U -R -S $CLUSTER -E .bashrc
+# Advanced First-time Setup -- The file after "-E" depends on your setup
+python3 spack_setup_script.py -R -S $CLUSTER -E .bashrc
+# Getting Updates (-E is not needed, but can be added if not used before)
+python3 spack_setup_script.py -U -R -S $CLUSTER 
 ```
 Some options require Spack to be loaded in the environment, so it is a good idea to make sure that it is loaded before you run this tool. We've set this script up with output messages that outline what it is doing, but the individual steps are also outlined in the python file itself. To update your local files with any potential updates, add the `-U` flag to have the script do a `git pull` before running. For more details on the flags, run with `--help`
 
