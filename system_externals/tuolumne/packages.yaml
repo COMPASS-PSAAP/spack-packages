@@ -1,0 +1,502 @@
+# Tuolumne packages.yaml
+# Version 1.0
+packages:
+  ##################################################################
+  # General variants we always want on this system
+  ##################################################################
+  all:
+    variants: +rocm amdgpu_target=gfx942
+    providers:
+      blas: [cray-libsci@25.09.0, openblas]
+      fftw-api: [cray-fftw, fftw]
+      lapack: [cray-libsci@25.09.0, openblas]
+      mpi: [cray-mpich]
+      scalapack: [netlib-scalapack]
+  ##################################################################
+  # Compiler rules for this system.
+  # Main change from auto-added compilers is the added rpaths in cce
+  ##################################################################
+  cce:
+    externals:
+    - spec: cce@20.0.0
+      prefix: /opt/cray/pe/cce/20.0.0
+      extra_attributes:
+        compilers:
+          c: /opt/cray/pe/cce/20.0.0/bin/craycc
+          cxx: /opt/cray/pe/cce/20.0.0/bin/crayCC
+          fortran: /opt/cray/pe/cce/20.0.0/bin/crayftn
+        # Rpaths added because spack doesn't know about them automatically
+        # and we don't want to rely on LD_LIBRARY_PATH if we can avoid it.
+        extra_rpaths:
+        - /opt/cray/pe/gcc-libs
+        - /opt/cray/pe/lib64/cce
+        - /opt/cray/lib64
+        - /opt/cray/libfabric/2.1/lib64
+  llvm:
+    externals:
+    - spec: llvm@19.1.7+clang~flang+lld+lldb
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/clang
+          cxx: /usr/bin/clang++
+    - spec: llvm@19.1.7+clang~flang~lld~lldb
+      prefix: /usr/lib64/ccache
+      extra_attributes:
+        compilers:
+          c: /usr/lib64/ccache/clang
+          cxx: /usr/lib64/ccache/clang++
+  gcc:
+    externals:
+    - spec: gcc@8.5.0 languages:='c,c++,fortran' platform=linux os=rhel8 target=x86_64
+      prefix: /usr
+      extra_attributes:
+        compilers:
+          c: /usr/bin/gcc
+          cxx: /usr/bin/g++
+          fortran: /usr/bin/gfortran
+    - spec: gcc@11.2.1 languages:='c,c++,fortran'
+      prefix: /usr/tce/packages/gcc/gcc-11.2.1/
+      extra_attributes:
+        compilers:
+          c: /usr/tce/packages/gcc/gcc-11.2.1/bin/gcc
+          cxx: /usr/tce/packages/gcc/gcc-11.2.1/bin/g++
+          fortran: /usr/tce/packages/gcc/gcc-11.2.1/bin/gfortran
+    - spec: gcc@12.2.1 languages:='c,c++,fortran'
+      prefix: /usr/tce/packages/gcc/gcc-12.2.1/
+      extra_attributes:
+        compilers:
+          c: /usr/tce/packages/gcc/gcc-12.2.1/bin/gcc
+          cxx: /usr/tce/packages/gcc/gcc-12.2.1/bin/g++
+          fortran: /usr/tce/packages/gcc/gcc-12.2.1/bin/gfortran
+    - spec: gcc@13.3.1 languages:='c,c++'
+      prefix: /usr/lib64/ccache
+      extra_attributes:
+        compilers:
+          c: /usr/lib64/ccache/gcc
+          cxx: /usr/lib64/ccache/g++
+    - spec: gcc@13.3.1 languages:='c,c++,fortran'
+      prefix: /usr/tce
+      extra_attributes:
+        compilers:
+          c: /usr/tce/bin/gcc
+          cxx: /usr/tce/bin/g++
+          fortran: /usr/tce/bin/gfortran
+  ##################################################################
+  # Extenals found by spack
+  ##################################################################
+  binutils:
+    externals:
+    - spec: binutils@2.40~gold~headers
+      prefix: /opt/cray/pe/cce/20.0.0/binutils/x86_64/x86_64-pc-linux-gnu
+    - spec: binutils@2.30.125~gold+headers
+      prefix: /usr
+    - spec: binutils@2.40.21~gold~headers
+      prefix: /usr/tce
+  flex:
+    externals:
+    - spec: flex@2.6.1+lex
+      prefix: /usr
+  gettext:
+    externals:
+    - spec: gettext@0.19.8.1
+      prefix: /usr
+  gawk:
+    externals:
+    - spec: gawk@4.2.1
+      prefix: /usr
+  ccache:
+    externals:
+    - spec: ccache@3.7.7
+      prefix: /usr
+  coreutils:
+    externals:
+    - spec: coreutils@8.30
+      prefix: /usr
+  openssh:
+    externals:
+    - spec: openssh@8.0p1
+      prefix: /usr
+  subversion:
+    externals:
+    - spec: subversion@1.10.2
+      prefix: /usr
+  git-lfs:
+    externals:
+    - spec: git-lfs@3.4.1
+      prefix: /usr
+    - spec: git-lfs@2.11.0
+      prefix: /usr/tce
+  diffutils:
+    externals:
+    - spec: diffutils@3.6
+      prefix: /usr
+  sed:
+    externals:
+    - spec: sed@4.5
+      prefix: /usr
+  doxygen:
+    externals:
+    - spec: doxygen@1.8.14+graphviz~mscgen
+      prefix: /usr
+  findutils:
+    externals:
+    - spec: findutils@4.6.0
+      prefix: /usr
+  gmake:
+    externals:
+    - spec: gmake@4.2.1
+      prefix: /usr
+  groff:
+    externals:
+    - spec: groff@1.22.3
+      prefix: /usr
+  swig:
+    externals:
+    - spec: swig@3.0.12
+      prefix: /usr
+  perl:
+    externals:
+    - spec: perl@5.26.3+cpanm+opcode+open+shared+threads
+      prefix: /usr
+  m4:
+    externals:
+    - spec: m4@1.4.18
+      prefix: /usr
+  texinfo:
+    externals:
+    - spec: texinfo@6.5
+      prefix: /usr
+  curl:
+    externals:
+    - spec: curl@7.61.1+gssapi+ldap+nghttp2
+      prefix: /usr
+  rust:
+    externals:
+    - spec: rust@1.84.1
+      prefix: /usr
+      extra_attributes:
+        cargo: /usr/bin/cargo
+        compilers:
+          rust: /usr/bin/rustc
+  git:
+    externals:
+    - spec: git@2.43.7+tcltk
+      prefix: /usr
+    - spec: git@2.29.1+tcltk
+      prefix: /usr/tce
+  libtool:
+    externals:
+    - spec: libtool@2.4.6
+      prefix: /usr
+  autoconf:
+    externals:
+    - spec: autoconf@2.69
+      prefix: /usr
+  cvs:
+    externals:
+    - spec: cvs@1.11.23
+      prefix: /usr
+  tar:
+    externals:
+    - spec: tar@1.30
+      prefix: /usr
+  zlib:
+    externals:
+    - spec: zlib@1.2.11
+      prefix: /usr
+  pkgconf:
+    externals:
+    - spec: pkgconf@1.4.2
+      prefix: /usr
+  cmake:
+    externals:
+    - spec: cmake@3.26.5
+      prefix: /usr
+    - spec: cmake@3.24.2
+      prefix: /usr/tce
+  openssl:
+    externals:
+    - spec: openssl@1.1.1k
+      prefix: /usr
+  python:
+    externals:
+    - spec: python@3.6.8+bz2+crypt+ctypes+dbm+lzma+pyexpat~pythoncmd+readline+sqlite3+ssl+tix+tkinter+uuid+zlib
+      prefix: /usr
+    - spec: python@3.9.12+bz2+crypt+ctypes+dbm+lzma+pyexpat~pythoncmd+readline+sqlite3+ssl+tix+tkinter+uuid+zlib
+      prefix: /usr/tce
+  automake:
+    externals:
+    - spec: automake@1.16.1
+      prefix: /usr
+  go:
+    externals:
+    - spec: go@1.24.4
+      prefix: /usr
+  bison:
+    externals:
+    - spec: bison@3.0.4
+      prefix: /usr
+  #########################################################
+  # Custom to find the various cray-specific packages
+  #########################################################
+  tcsh:
+    buildable: false
+    externals:
+    - prefix: /usr
+      spec: tcsh@6.20.00
+    version: [6.20.00]
+  ncurses:
+    buildable: false
+    externals:
+    - prefix: /usr
+      spec: ncurses@5.9
+    version:
+    - '5.9'
+  slurm:
+    buildable: false
+    externals:
+    - prefix: /usr
+      spec: slurm@21.08.0
+    version: [21.08.0]
+  cray-libsci:
+    buildable: false
+    externals:
+    - modules:
+      - cray-libsci/25.09.0
+      spec: cray-libsci@25.09.0
+    version: [25.09.0]
+  cray-mpich:
+    buildable: false
+    externals:
+    - spec: cray-mpich@9.0.1 +rocm amdgpu_target=gfx942 %gcc@11.2
+      prefix: /opt/cray/pe/mpich/9.0.1/ofi/gnu/11.2
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/2.1/lib64/
+    - spec: cray-mpich@9.0.1 +rocm amdgpu_target=gfx942 %rocmcc@6
+      prefix: /opt/cray/pe/mpich/9.0.1/ofi/rocm-compiler/6.0
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/libfabric/2.1/lib64
+    - spec: cray-mpich@9.0.1 +rocm amdgpu_target=gfx942 %cce@20
+      prefix: /opt/cray/pe/mpich/9.0.1/ofi/crayclang/20.0
+      extra_attributes:
+        environment:
+          prepend_path:
+            LD_LIBRARY_PATH: /opt/cray/pe/lib64:/opt/cray/lib64:/opt/cray/libfabric/2.1/lib64
+  cray-fftw:
+    buildable: false
+    externals:
+    - spec: cray-fftw@3.3.8.13
+      prefix: /opt/cray/pe/fftw/3.3.8.13
+    variants: precision=float,double,long_double
+  hdf5:
+    buildable: false
+    externals:
+    - spec: hdf5@1.14.3.7 +mpi %cce@20
+      prefix: /opt/cray/pe/hdf5-parallel/1.14.3.7/crayclang/20.0
+    - spec: hdf5@1.13.3.7 +mpi %gcc@12.2.1
+      prefix: /opt/cray/pe/hdf5-parallel/1.14.3.7/gnu/12.2
+  hip:
+    buildable: false
+    externals:
+    - spec: hip@6.4.2
+      prefix: /opt/rocm-6.4.2
+      extra_attributes:
+        compilers:
+          hip: /opt/rocm-6.4.2/bin/hipcc
+  hip-rocclr:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2/rocclr
+      spec: hip-rocclr@6.4.2 ^hsa-rocr-dev@6.4.2
+  hipblas:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: hipblas@6.4.2
+  hipcub:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: hipcub@6.4.2
+  hipfft:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: hipfft@6.4.2
+  hipfort:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: hipfort@6.4.2
+  hipify-clang:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: hipify-clang@6.4.2
+  hipsparse:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: hipsparse@6.4.2
+  hsa-rocr-dev:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: hsa-rocr-dev@6.4.2
+  hsakmt-roct:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: hsakmt-roct@6.4.2
+  libfabric:
+    buildable: true
+    externals:
+    - prefix: /opt/cray/libfabric/2.1
+      spec: libfabric@2.1
+    - prefix: /opt/cray/libfabric/2.0
+      spec: libfabric@2.0
+    - prefix: /opt/cray/libfabric/1.7.2-llnl
+      spec: libfabric@1.7.2
+    version:
+    - '2.1'
+    - '2.0'
+    - 1.7.2
+    variants: fabrics=cxi,rxm,sockets,tcp,udp
+  llvm-amdgpu:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2/llvm
+      spec: llvm-amdgpu@6.4.2
+  miopen-hip:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: miopen-hip@6.4.2
+  parallel-netcdf:
+    buildable: true
+    variants: +cxx+fortran
+    version: []
+  rccl:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rccl@6.4.2
+  rocalution:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocalution@6.4.2
+  rocblas:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocblas@6.4.2
+  rocfft:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocfft@6.4.2
+  rocm-clang-ocl:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocm-clang-ocl@6.4.2
+  rocm-cmake:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocm-cmake@6.4.2
+  rocm-device-libs:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocm-device-libs@6.4.2
+  rocm-gdb:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocm-gdb@6.4.2
+  rocm-opencl:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2/opencl
+      spec: rocm-opencl@6.4.2
+  rocm-opencl-runtime:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2/opencl
+      spec: rocm-opencl-runtime@6.4.2
+  rocm-openmp-extras:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2/llvm
+      spec: rocm-openmp-extras@6.4.2
+  rocm-smi:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2/rocm_smi
+      spec: rocm-smi@6.4.2
+  rocm-smi-lib:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2/rocm_smi
+      spec: rocm-smi-lib@6.4.2
+  rocminfo:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocminfo@6.4.2
+  rocprim:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocprim@6.4.2
+  rocprofiler-dev:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocprofiler-dev@6.4.2
+  rocrand:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocrand@6.4.2
+  rocsolver:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocsolver@6.4.2
+  rocsparse:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocsparse@6.4.2
+  rocthrust:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: rocthrust@6.4.2
+  roctracer-dev:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-6.4.2
+      spec: roctracer-dev@6.4.2
+  papi:
+    buildable: false
+    externals:
+    - modules:
+      - papi/7.2.0.2
+      spec: papi@7.2.0.2
+    version: [7.2.0.2]
+  #########################################################
+  # Stuff we need for building on this system in particular
+  #########################################################
+  kokkos:
+    require: "+apu"
+  silo:
+    require: "~hzip~python"
