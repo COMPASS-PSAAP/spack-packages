@@ -75,6 +75,9 @@ class Canopy(CMakePackage, CudaPackage, ROCmPackage):
         # If testing is enabled, also install the tests
         options.append(self.define_from_variant("Canopy_INSTALL_TEST_EXECUTABLES", "testing"))
 
+        # If examples are enabled, also install the examples
+        options.append(self.define_from_variant("Canopy_INSTALL_EXAMPLES", "examples"))
+
         # Use hipcc as the c compiler if we are compiling for rocm. Doing it this way
         # keeps the wrapper insted of changeing CMAKE_CXX_COMPILER keeps the spack wrapper
         # and the rpaths it sets for us from the underlying spec.
