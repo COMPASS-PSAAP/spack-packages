@@ -29,16 +29,43 @@ class Canopy(CMakePackage, CudaPackage, ROCmPackage):
 
     # Variants are primarily backends to build on GPU systems and pass the right
     # informtion to the packages we depend on
-    variant("cuda", default=False, description="Use CUDA support from subpackages")
-    variant("openmp", default=False, description="Use OpenMP support from subpackages")
-    variant("rocm", default=False, description="Use ROCM support from subpackages")
+    variant("cuda", default=False, description="Require CUDA support from Kokkos")
+    variant("openmp", default=False, description="Require OPENMP support from Kokkos")
+    variant("rocm", default=False, description="Require ROCM support from Kokkos")
+    variant("openmptarget", default=False, description="Require OPENMPTARGET support from Kokkos")
+    variant("threads", default=False, description="Require THREADS support from Kokkos")
     variant("testing", default=False, description="Build and install tests")
     variant("examples", default=False, description="Build and install examples")
+    variant("profiling", default=False, description="Build with profiling information (increases runtime)")
     
     conflicts("+cuda", when="cuda_arch=none")
     conflicts("+rocm", when="amdgpu_target=none")
-        
-    # Cabana general depdendencies
+    
+    # Kokkos dependencies
+    depends_on("kokkos +threads", when="+threads")
+    depends_on("kokkos +openmp", when="+openmp")
+    depends_on("kokkos +openmptarget", when="+openmptarget")
+
+    # Trilinos dependencies
+    # Canopy uses Trilinos for load balancing via Zoltan2. The disabled packages
+    # mirror the spack.yaml environments used to build Canopy on NVIDIA and AMD
+    # systems and keep the Trilinos build minimal.
+    trilinos_base = (
+        "+zoltan2 ~muelu ~ml ~ifpack2 ~ifpack ~fortran ~epetraext ~epetra "
+        "~belos ~aztec ~anasazi ~amesos2 ~amesos"
+    )
+    depends_on(f"trilinos {trilinos_base}")
+
+    # Trilinos GPU dependencies
+    for arch in CudaPackage.cuda_arch_values:
+        cuda_dep = "+cuda cuda_arch={0}".format(arch)
+        depends_on(f"trilinos {trilinos_base} {cuda_dep}", when=cuda_dep)
+
+    for arch in ROCmPackage.amdgpu_targets:
+        rocm_dep = "+rocm amdgpu_target={0}".format(arch)
+        depends_on(f"trilinos {trilinos_base} {rocm_dep}", when=rocm_dep)
+
+    # Cabana general dependencies
     depends_on("cabana @master +grid +mpi +arborx", when="@develop")
     depends_on("cabana @master +grid +mpi +arborx", when="@master")
 
@@ -64,7 +91,7 @@ class Canopy(CMakePackage, CudaPackage, ROCmPackage):
     def cmake_args(self):
         options = []
 
-        enable = ["EXAMPLES", "TESTING"]
+        enable = ["EXAMPLES", "TESTING", "PROFILING"]
         require = []
 
         for category, cname in zip([enable, require], ["ENABLE", "REQUIRE"]):
