@@ -36,7 +36,7 @@ class Canopy(CMakePackage, CudaPackage, ROCmPackage):
     variant("threads", default=False, description="Require THREADS support from Kokkos")
     variant("testing", default=False, description="Build and install tests")
     variant("examples", default=False, description="Build and install examples")
-    variant("profiling", default=False, description="Build with profiling information (increases runtime)")
+    variant("profiling", default=False, description="Enable FMM phase timing via MPI_Wtime")
     
     conflicts("+cuda", when="cuda_arch=none")
     conflicts("+rocm", when="amdgpu_target=none")
