@@ -147,7 +147,11 @@ class Beatnik(CMakePackage, CudaPackage, ROCmPackage):
 
         # Test suite (off by default; Beatnik's top-level CMakeLists.txt also
         # defaults it OFF, but be explicit so the variant is single-source).
+        # +testing also flips INSTALL_TEST_EXECUTABLES so the per-device test
+        # binaries land in the spack prefix (under share/Beatnik/tests/, per
+        # the test harness convention — NOT in bin/).
         args.append(self.define_from_variant("Beatnik_ENABLE_TESTING", "testing"))
+        args.append(self.define_from_variant("Beatnik_INSTALL_TEST_EXECUTABLES", "testing"))
 
         # Examples (rocketrig). +examples flips both ENABLE and INSTALL on so
         # the binary is built AND installed into the spack prefix's bin/.
