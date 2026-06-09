@@ -43,6 +43,24 @@ class Beatnik(CMakePackage, CudaPackage, ROCmPackage):
         default=True,
         description="Build and install the Beatnik example binaries (rocketrig)",
     )
+    variant(
+        "profiling",
+        default=False,
+        description="Enable Beatnik profiling/diagnostics instrumentation",
+    )
+    variant(
+        "profiling_level",
+        default="default",
+        values=("default", "0", "1", "2", "3"),
+        multi=False,
+        description=(
+            "Profiling detail level: 0=off, 1=basic (auto_maintain action "
+            "log), 2/3=detailed/verbose (reserved). 'default' lets the "
+            "CMake side resolve from +profiling (ON -> 1, OFF -> 0). "
+            "Setting profiling_level=N implies +profiling unless ~profiling "
+            "is also given, which forces level 0 (CMake kill switch)."
+        ),
+    )
 
     # Dependencies for all Beatnik versions
     depends_on("c", type="build")
@@ -159,6 +177,15 @@ class Beatnik(CMakePackage, CudaPackage, ROCmPackage):
         # Canopy_ENABLE_EXAMPLES / Canopy_INSTALL_EXAMPLES.
         args.append(self.define_from_variant("Beatnik_ENABLE_EXAMPLES", "examples"))
         args.append(self.define_from_variant("Beatnik_INSTALL_EXAMPLES", "examples"))
+
+        # Profiling. +profiling is the kill switch; profiling_level lets the
+        # spec pin a specific level (0/1/2/3) directly. "default" passes the
+        # empty string to CMake so Beatnik's CMakeLists.txt picks the level
+        # from Beatnik_ENABLE_PROFILING alone (ON -> 1, OFF -> 0).
+        args.append(self.define_from_variant("Beatnik_ENABLE_PROFILING", "profiling"))
+        level = self.spec.variants["profiling_level"].value
+        if level != "default":
+            args.append(self.define("Beatnik_PROFILING_LEVEL", level))
 
         return args
 

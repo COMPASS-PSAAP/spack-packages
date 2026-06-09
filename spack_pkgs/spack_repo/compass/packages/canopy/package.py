@@ -37,6 +37,19 @@ class Canopy(CMakePackage, CudaPackage, ROCmPackage):
     variant("testing", default=False, description="Build and install tests")
     variant("examples", default=False, description="Build and install examples")
     variant("profiling", default=False, description="Enable FMM phase timing via MPI_Wtime")
+    variant(
+        "profiling_level",
+        default="default",
+        values=("default", "0", "1", "2", "3"),
+        multi=False,
+        description=(
+            "Profiling detail level: 0=off, 1=basic phases, 2=detailed "
+            "sub-phases, 3=verbose (reserved). 'default' lets the CMake "
+            "side resolve from +profiling (ON -> 1, OFF -> 0). Setting "
+            "profiling_level=N implies +profiling unless ~profiling is "
+            "also given, which forces level 0 (CMake kill switch)."
+        ),
+    )
     
     conflicts("+cuda", when="cuda_arch=none")
     conflicts("+rocm", when="amdgpu_target=none")
@@ -104,6 +117,12 @@ class Canopy(CMakePackage, CudaPackage, ROCmPackage):
 
         # If examples are enabled, also install the examples
         options.append(self.define_from_variant("Canopy_INSTALL_EXAMPLES", "examples"))
+
+        # profiling_level: pin a specific level if set, else let
+        # Canopy_ENABLE_PROFILING alone drive it (ON -> 1, OFF -> 0).
+        level = self.spec.variants["profiling_level"].value
+        if level != "default":
+            options.append(self.define("Canopy_PROFILING_LEVEL", level))
 
         # Use hipcc as the c compiler if we are compiling for rocm. Doing it this way
         # keeps the wrapper insted of changeing CMAKE_CXX_COMPILER keeps the spack wrapper
