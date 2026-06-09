@@ -124,3 +124,11 @@ class Canopy(CMakePackage, CudaPackage, ROCmPackage):
                 # "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath={0} -L{0} -lmpi_gtl_cuda".format(gtl_dir)
             # )
         return options
+
+    def setup_run_environment(self, env):
+        # +testing installs test binaries to share/Canopy/tests/ (per the
+        # test_harness.cmake convention). Spack only puts bin/ on PATH by
+        # default, so prepend the tests dir so users can invoke
+        # `Canopy_Test_<name>_<DEVICE>` after `spack env activate`.
+        if self.spec.satisfies("+testing"):
+            env.prepend_path("PATH", self.prefix.share.Canopy.tests)

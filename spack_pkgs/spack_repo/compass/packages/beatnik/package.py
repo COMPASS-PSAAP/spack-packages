@@ -161,3 +161,11 @@ class Beatnik(CMakePackage, CudaPackage, ROCmPackage):
         args.append(self.define_from_variant("Beatnik_INSTALL_EXAMPLES", "examples"))
 
         return args
+
+    def setup_run_environment(self, env):
+        # +testing installs test binaries to share/Beatnik/tests/ (per the
+        # test_harness.cmake convention). Spack only puts bin/ on PATH by
+        # default, so prepend the tests dir so users can invoke
+        # `Beatnik_Test_FmmVsExact_MPI_<DEVICE>` after `spack env activate`.
+        if self.spec.satisfies("+testing"):
+            env.prepend_path("PATH", self.prefix.share.Beatnik.tests)
