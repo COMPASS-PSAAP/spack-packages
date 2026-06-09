@@ -38,6 +38,11 @@ class Beatnik(CMakePackage, CudaPackage, ROCmPackage):
         default=False,
         description="Build the Beatnik test suite (Beatnik_ENABLE_TESTING=ON; requires GTest)",
     )
+    variant(
+        "examples",
+        default=True,
+        description="Build and install the Beatnik example binaries (rocketrig)",
+    )
 
     # Dependencies for all Beatnik versions
     depends_on("c", type="build")
@@ -143,5 +148,12 @@ class Beatnik(CMakePackage, CudaPackage, ROCmPackage):
         # Test suite (off by default; Beatnik's top-level CMakeLists.txt also
         # defaults it OFF, but be explicit so the variant is single-source).
         args.append(self.define_from_variant("Beatnik_ENABLE_TESTING", "testing"))
+
+        # Examples (rocketrig). +examples flips both ENABLE and INSTALL on so
+        # the binary is built AND installed into the spack prefix's bin/.
+        # Beatnik's top-level CMakeLists.txt defaults both OFF to mirror
+        # Canopy_ENABLE_EXAMPLES / Canopy_INSTALL_EXAMPLES.
+        args.append(self.define_from_variant("Beatnik_ENABLE_EXAMPLES", "examples"))
+        args.append(self.define_from_variant("Beatnik_INSTALL_EXAMPLES", "examples"))
 
         return args
