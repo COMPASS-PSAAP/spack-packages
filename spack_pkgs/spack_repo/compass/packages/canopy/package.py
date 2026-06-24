@@ -151,3 +151,43 @@ class Canopy(CMakePackage, CudaPackage, ROCmPackage):
         # `Canopy_Test_<name>_<DEVICE>` after `spack env activate`.
         if self.spec.satisfies("+testing"):
             env.prepend_path("PATH", self.prefix.share.Canopy.tests)
+
+    # ----------------------------------------------------------------------- #
+    # Stand-alone tests (`spack test run canopy`, also `spack install
+    # --test=root`).
+    #
+    # Scope: a single-rank SERIAL smoke test only. `spack test` runs on a login
+    # node with no scheduler allocation, so multi-rank and GPU correctness
+    # (the full minimum test set and device backends) cannot run here -- those
+    # are validated in the build tree with `ctest` via the per-system batch
+    # scripts (see docs/<system>/claude.md and scripts/<system>/). The np=1
+    # SERIAL run still gives a real "did this install actually work" signal:
+    # it exercises the FMM solve end-to-end and links the full dependency
+    # stack. At one rank the suite passes cleanly -- the known FP32_smokeTest
+    # failure only manifests at >= 2 ranks.
+    # ----------------------------------------------------------------------- #
+    def test_multisolve_serial(self):
+        """run the SERIAL MultiSolve unit test at a single rank"""
+        if self.spec.satisfies("~testing"):
+            raise SkipTest("test binaries are only installed with +testing")
+        if self.spec.satisfies("+cuda") or self.spec.satisfies("+rocm"):
+            # Even the SERIAL binary brings up the GPU backend at
+            # Kokkos::initialize, which needs a GPU (hence an allocation) that
+            # `spack test` does not hold on a login node.
+            raise SkipTest(
+                "GPU build: run tests via the scheduler batch scripts "
+                "(docs/<system>/claude.md), not `spack test`"
+            )
+
+        exe = which(
+            "Canopy_Test_MultiSolve_MPI_SERIAL",
+            path=self.prefix.share.Canopy.tests,
+            required=True,
+        )
+        # Invoked directly => singleton MPI rank (np=1); no launcher needed.
+        with test_part(
+            self,
+            "test_multisolve_serial",
+            purpose="single-rank SERIAL MultiSolve smoke test",
+        ):
+            exe()
