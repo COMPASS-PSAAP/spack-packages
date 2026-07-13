@@ -34,6 +34,14 @@ class Tessera(CMakePackage, CudaPackage, ROCmPackage):
     variant("examples", default=False, description="Build and install examples")
     variant("profiling", default=False, description="Enable Tessera internal profiling")
     variant(
+        "debug",
+        default=True,
+        description=(
+            "Enable Tessera runtime debug checks (e.g. the stale-handle "
+            "generation guard on Mesh slice/CSR/key-View accessors)"
+        ),
+    )
+    variant(
         "profiling_level",
         default="default",
         values=("default", "0", "1", "2", "3"),
@@ -108,6 +116,8 @@ class Tessera(CMakePackage, CudaPackage, ROCmPackage):
 
         for var in ["TESTING", "EXAMPLES", "PROFILING"]:
             options.append(self.define_from_variant(f"Tessera_ENABLE_{var}", var.lower()))
+
+        options.append(self.define_from_variant("Tessera_ENABLE_DEBUG_CHECKS", "debug"))
 
         # If testing is enabled, also install the tests
         options.append(self.define_from_variant("Tessera_INSTALL_TEST_EXECUTABLES", "testing"))
