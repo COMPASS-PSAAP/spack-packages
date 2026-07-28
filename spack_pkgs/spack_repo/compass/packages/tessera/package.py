@@ -19,7 +19,8 @@ class Tessera(CMakePackage, CudaPackage, ROCmPackage):
 
     license("BSD-3-Clause")
 
-    version("main", branch="main")
+    version("develop", branch="develop", submodules=True)
+    version("master", branch="master", submodules=True)
 
     depends_on("c", type="build")
     depends_on("cxx", type="build")
