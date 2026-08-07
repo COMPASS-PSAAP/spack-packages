@@ -76,9 +76,17 @@ class Tessera(CMakePackage, CudaPackage, ROCmPackage):
     # is the only Trilinos consumer). The disabled packages keep the Trilinos build
     # minimal, mirroring the spack.yaml environments used to build Tessera's
     # dependents (Canopy) on NVIDIA and AMD systems.
+    #
+    # Only variants that still exist in current Trilinos may be named here.
+    # Trilinos deprecated the Epetra stack in 17.0.0 and its spack package
+    # guards those variants with `with when("@:16")`, so naming any of
+    # ~amesos ~aztec ~epetra ~epetraext ~ifpack ~ml caps the whole DAG at
+    # trilinos@14.2.0 -- which predates external-Kokkos support (@14.4:) and
+    # therefore builds its own bundled Kokkos alongside the one Tessera uses.
+    # Those packages are off by default in 17.0.0+, so dropping them from this
+    # list changes nothing about what gets built.
     trilinos_base = (
-        "+zoltan2 ~muelu ~ml ~ifpack2 ~ifpack ~fortran ~epetraext ~epetra "
-        "~belos ~aztec ~anasazi ~amesos2 ~amesos"
+        "+zoltan2 ~muelu ~ifpack2 ~fortran ~belos ~anasazi ~amesos2"
     )
     depends_on(f"trilinos {trilinos_base}")
     depends_on(f"trilinos {trilinos_base} +openmp", when="+openmp")
