@@ -32,10 +32,13 @@ class Cabana(CMakePackage, CudaPackage, ROCmPackage):
     version("0.1.0", sha256="3280712facf6932b9d1aff375b24c932abb9f60a8addb0c0a1950afd0cb9b9cf")
     version("0.1.0-rc0", sha256="73754d38aaa0c2a1e012be6959787108fec142294774c23f70292f59c1bdc6c5")
 
+    # Copy kokkos backends (cuda, openmp, serial, rocm, ...) as variants
     _kokkos_backends = Kokkos.devices_variants
     for _backend in _kokkos_backends:
-        _deflt, _descr = _kokkos_backends[_backend]
-        variant(_backend.lower(), default=_deflt, description=_descr)
+        _deflt, _when, _descr = _kokkos_backends[_backend]
+        if _when is not None:
+            _when = f"^kokkos{_when}"
+        variant(_backend.lower(), default=_deflt, description=_descr, when=_when)
 
     variant("shared", default=True, description="Build shared libraries")
     variant("mpi", default=True, description="Build with mpi support")
