@@ -11,7 +11,7 @@ from spack.package import *
 
 
 class Cabana(CMakePackage, CudaPackage, ROCmPackage):
-    """The Exascale Co-Design Center for Particle Applications Toolkit"""
+    """CUP-ECS Fork of the Exascale Co-Design Center for Particle Applications Toolkit"""
 
     homepage = "https://github.com/CUP-ECS/Cabana"
     git = "https://github.com/CUP-ECS/Cabana.git"
