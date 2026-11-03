@@ -11,7 +11,7 @@ from spack.package import *
 
 
 class Cabana(CMakePackage, CudaPackage, ROCmPackage):
-    """CUP-ECS Fork of Exascale Co-Design Center for Particle Applications Toolkit"""
+    """CUP-ECS Fork of the Exascale Co-Design Center for Particle Applications Toolkit"""
 
     homepage = "https://github.com/CUP-ECS/Cabana"
     git = "https://github.com/CUP-ECS/Cabana.git"
@@ -22,31 +22,32 @@ class Cabana(CMakePackage, CudaPackage, ROCmPackage):
     tags = ["e4s", "ecp"]
 
     version("master", branch="master")
+    version("0.8.0", sha256="1399145d4fbfe5d4ac569540e97d3609053d333a12b3b3882dcb5dc488767907")
     version("0.7.0", sha256="3d46532144ea9a3f36429a65cccb7562d1244f1389dd8aff0d253708d1ec9838")
     version("0.6.1", sha256="fea381069fe707921831756550a665280da59032ea7914f7ce2a01ed467198bc")
     version("0.6.0", sha256="a88a3f80215998169cdbd37661c0c0af57e344af74306dcd2b61983d7c69e6e5")
     version("0.5.0", sha256="b7579d44e106d764d82b0539285385d28f7bbb911a572efd05c711b28b85d8b1")
     version("0.4.0", sha256="c347d23dc4a5204f9cc5906ccf3454f0b0b1612351bbe0d1c58b14cddde81e85")
     version("0.3.0", sha256="fb67ab9aaf254b103ae0eb5cc913ddae3bf3cd0cf6010e9686e577a2981ca84f")
-    version("0.2.0", sha256="3e0c0e224e90f4997f6c7e2b92f00ffa18f8bcff72f789e0908cea0828afc2cb")
-    version("0.1.0", sha256="3280712facf6932b9d1aff375b24c932abb9f60a8addb0c0a1950afd0cb9b9cf")
-    version("0.1.0-rc0", sha256="73754d38aaa0c2a1e012be6959787108fec142294774c23f70292f59c1bdc6c5")
 
+    # Copy kokkos backends (cuda, openmp, serial, rocm, ...) as variants
     _kokkos_backends = Kokkos.devices_variants
     for _backend in _kokkos_backends:
-        _deflt, _descr = _kokkos_backends[_backend]
-        variant(_backend.lower(), default=_deflt, description=_descr)
+        _deflt, _when, _descr = _kokkos_backends[_backend]
+        if _when is not None:
+            _when = f"^kokkos{_when}"
+        variant(_backend.lower(), default=_deflt, description=_descr, when=_when)
 
     variant("shared", default=True, description="Build shared libraries")
     variant("mpi", default=True, description="Build with mpi support")
     variant("all", default=False, description="Build with ALL support")
     variant("arborx", default=False, description="Build with ArborX support")
-    variant("heffte", default=False, description="Build with heFFTe support")
+    variant("heffte", default=False, description="Build with heFFTe support", when="@0.5:")
     variant("hypre", default=False, description="Build with HYPRE support")
-    variant("silo", default=False, description="Build with SILO support")
-    variant("hdf5", default=False, description="Build with HDF5 support")
-    variant("cajita", default=False, description="Build Cajita subpackage (Grid in 0.6:)")
-    variant("grid", default=False, description="Build Grid subpackage")
+    variant("silo", when="@0.4:", default=False, description="Build with SILO support")
+    variant("hdf5", when="@0.6: +mpi", default=False, description="Build with HDF5 support")
+    variant("cajita", when="@:0.5 +mpi", default=False, description="Build Cajita subpackage")
+    variant("grid", when="@0.6: +mpi", default=False, description="Build Grid subpackage")
     variant("testing", default=False, description="Build unit tests")
     variant("examples", default=False, description="Build tutorial examples")
     variant("performance_testing", default=False, description="Build performance tests")
@@ -58,69 +59,61 @@ class Cabana(CMakePackage, CudaPackage, ROCmPackage):
     depends_on("cmake@3.16:", type="build", when="@0.5.0:")
 
     depends_on("googletest", type="build", when="+testing")
-    _versions = {"0.3:": "@3.1:", "0.4:": "@3.2:", "0.6:": "@3.7:"}
-    for _version in _versions:
-        _kk_version = _versions[_version]
-        for _backend in _kokkos_backends:
-            if _backend == "cuda" or _backend == "hip":
-                continue
-            else:
-                _kk_spec = "kokkos{0}+{1}".format(_kk_version, _backend)
-            depends_on(_kk_spec, when="@{0}+{1}".format(_version, _backend))
+
+    depends_on("kokkos@3.1:4.6", when="@0.3")
+    depends_on("kokkos@3.2:4.6", when="@0.4:0.5")
+    depends_on("kokkos@3.7:4.6", when="@0.6:0.7")
+    depends_on("kokkos@4.1:4.6", when="@0.8.0")
+    depends_on("kokkos@4.1:", when="@0.8.1:")
+
+    for _backend in _kokkos_backends:
+        depends_on(f"kokkos~{_backend}", when=f"~{_backend}")
+        depends_on(f"kokkos+{_backend}", when=f"+{_backend}")
 
     # Propagate cuda architectures down to Kokkos and optional submodules
-    for arch in CudaPackage.cuda_arch_values:
-        cuda_dep = "+cuda cuda_arch={0}".format(arch)
-        depends_on("kokkos {0}".format(cuda_dep), when=cuda_dep)
-        depends_on("heffte {0}".format(cuda_dep), when="+heffte {0}".format(cuda_dep))
-        depends_on("arborx {0}".format(cuda_dep), when="+arborx {0}".format(cuda_dep))
-        depends_on("hypre {0}".format(cuda_dep), when="+hypre {0}".format(cuda_dep))
+    for _arch in CudaPackage.cuda_arch_values:
+        cuda_dep = f"cuda_arch={_arch}"
+        depends_on(f"kokkos {cuda_dep}", when=cuda_dep)
+        depends_on(f"heffte {cuda_dep}", when=f"+heffte {cuda_dep}")
+        depends_on(f"arborx {cuda_dep}", when=f"+arborx {cuda_dep}")
+        depends_on(f"hypre {cuda_dep}", when=f"+hypre {cuda_dep}")
 
-    for arch in ROCmPackage.amdgpu_targets:
-        rocm_dep = "+rocm amdgpu_target={0}".format(arch)
-        depends_on("kokkos {0}".format(rocm_dep), when=rocm_dep)
-        depends_on("heffte {0}".format(rocm_dep), when="+heffte {0}".format(rocm_dep))
-        depends_on("arborx {0}".format(rocm_dep), when="+arborx {0}".format(rocm_dep))
-        depends_on("hypre {0}".format(rocm_dep), when="+hypre {0}".format(rocm_dep))
-
-    conflicts("+cuda", when="cuda_arch=none")
-    conflicts("+rocm", when="amdgpu_target=none")
+    for _arch in ROCmPackage.amdgpu_targets:
+        rocm_dep = f"amdgpu_target={_arch}"
+        depends_on(f"kokkos {rocm_dep}", when=rocm_dep)
+        depends_on(f"heffte {rocm_dep}", when=f"+heffte {rocm_dep}")
+        depends_on(f"arborx {rocm_dep}", when=f"+arborx {rocm_dep}")
+        depends_on(f"hypre {rocm_dep}", when=f"+hypre {rocm_dep}")
 
     # https://github.com/ECP-copa/Cabana/releases/tag/0.7.0
-    depends_on("kokkos+cuda_lambda@3.7:", when="+cuda")
-    depends_on("kokkos+cuda_lambda@4.1:", when="+cuda@0.7:")
+    depends_on("kokkos@3.7: +cuda_lambda", when="@:0.6 +cuda")
+    depends_on("kokkos@4.1: +cuda_lambda", when="@0.7: +cuda")
 
     # Dependencies for subpackages
     depends_on("all-library", when="@0.5.0:+all")
-    depends_on("arborx", when="@0.3.0:+arborx")
-    depends_on("hypre_cmake@2.22.0:", when="@0.4.0 +hypre")
-    depends_on("hypre_cmake@2.22.1:", when="@0.5.0:0.7.0 +hypre")
+    depends_on("arborx", when="+arborx @0.8:")
+    depends_on("arborx@1.7", when="+arborx @:0.7.0")
+    depends_on("hypre-cmake@2.22.0:", when="@0.4.0 +hypre")
+    depends_on("hypre-cmake@2.22.1:", when="@0.5.0:0.7.0 +hypre")
     depends_on("hypre@3.0.0:", when="@0.8.0:+hypre")
-    depends_on("heffte@2.0.0", when="@0.4.0+heffte")
     depends_on("heffte@2.1.0", when="@0.5.0+heffte")
     depends_on("heffte@2.3.0:", when="@0.6.0:+heffte")
     depends_on("silo", when="@0.5.0:+silo")
     depends_on("hdf5", when="@0.6.0:+hdf5")
     depends_on("mpi", when="+mpi")
 
-    # CMakeLists.txt of Cabana>=0.6 always enables HDF5 with CMake >= 3.26 (not changed post-0.6):
-    conflicts("~hdf5", when="@0.6.0: ^cmake@3.26:")
-
-    # Cabana HDF5 support requires MPI.
-    conflicts("+hdf5 ~mpi")
-
-    # Cajita support requires MPI
-    conflicts("+cajita ~mpi")
-    conflicts("+grid ~mpi")
+    # Hardware targets are required for GPU builds
+    conflicts("+cuda", when="cuda_arch=none")
+    conflicts("+rocm", when="amdgpu_target=none")
 
     # The +grid does not support gcc>=13 (missing iostream/cstdint includes):
     conflicts("+grid", when="@:0.6 %gcc@13:")
 
     # Conflict variants only available in newer versions of cabana
-    conflicts("+rocm", when="@:0.2.0")
     conflicts("+sycl", when="@:0.3.0")
-    conflicts("+silo", when="@:0.3.0")
-    conflicts("+hdf5", when="@:0.5.0")
+
+    # Hypre doesn't support rocm for older versions
+    conflicts("+hypre +rocm", when="@:0.7.0")
 
     @when("+mpi")
     def patch(self):
@@ -130,26 +123,24 @@ class Cabana(CMakePackage, CudaPackage, ROCmPackage):
     def cmake_args(self):
         options = [self.define_from_variant("BUILD_SHARED_LIBS", "shared")]
 
-        enable = ["CAJITA", "TESTING", "EXAMPLES", "PERFORMANCE_TESTING"]
+        enable = ["TESTING", "EXAMPLES", "PERFORMANCE_TESTING"]
         require = ["ALL", "ARBORX", "HEFFTE", "HYPRE", "SILO", "HDF5"]
 
-        # These variables were removed in 0.3.0 (where backends are
-        # automatically used from Kokkos)
-        if self.spec.satisfies("@:0.2.0"):
-            enable += ["Serial", "OpenMP", "Cuda"]
         # MPI was changed from ENABLE to REQUIRE in 0.4.0
         if self.spec.satisfies("@:0.3.0"):
-            enable += ["MPI"]
+            enable.append("MPI")
         else:
-            require += ["MPI"]
+            require.append("MPI")
 
         # Cajita was renamed Grid in 0.6
         if self.spec.satisfies("@0.6.0:"):
-            enable += ["GRID"]
+            enable.append("GRID")
+        else:
+            enable.append("CAJITA")
 
         for category, cname in zip([enable, require], ["ENABLE", "REQUIRE"]):
             for var in category:
-                cbn_option = "Cabana_{0}_{1}".format(cname, var)
+                cbn_option = f"Cabana_{cname}_{var}"
                 options.append(self.define_from_variant(cbn_option, var.lower()))
 
         # Attempt to disable find_package() calls for disabled options(if option supports it):
