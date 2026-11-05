@@ -22,6 +22,7 @@ class Cabanafluids(CMakePackage, CudaPackage, ROCmPackage):
 
     version("develop", branch="develop")
     version("main", branch="main")
+    version("0.9.0", tag="v0.9.0", commit="743cd4085546e2be920c1eee19ca8c4afd3dead7")
 
     # Variants are primarily backends to build on GPU systems and pass the right
     # informtion to the packages we depend on
