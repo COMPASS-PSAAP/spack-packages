@@ -172,7 +172,7 @@ packages:
       prefix: /usr
   rust:
     externals:
-    - spec: rust@1.84.1
+    - spec: rust@1.92.0
       prefix: /usr
       extra_attributes:
         cargo: /usr/bin/cargo
