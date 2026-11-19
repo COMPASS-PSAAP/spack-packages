@@ -88,6 +88,10 @@ class Parthenon(CMakePackage):
             spec.satisfies("^kokkos %cxx=clang") or spec.satisfies("^kokkos %cxx=rocmcc")
         ):
             env.set("SPACK_CXX", spec["hip"].hipcc)
+            # FindThreads tests with the C compiler; a non-clang one such as
+            # craycc links libpthread implicitly, so CMake omits -lpthread
+            # from the hipcc link
+            env.set("SPACK_CC", join_path(spec["llvm-amdgpu"].prefix.bin, "amdclang"))
         self.setup_run_environment(env)
 
     def setup_run_environment(self, env):
