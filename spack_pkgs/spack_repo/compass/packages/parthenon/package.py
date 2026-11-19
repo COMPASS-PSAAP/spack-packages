@@ -79,4 +79,8 @@ class Parthenon(CMakePackage):
         ]
         if spec.satisfies("^kokkos+wrapper"):
             args.append(self.define("CMAKE_CXX_COMPILER", self["kokkos"].kokkos_cxx))
+        elif spec.satisfies("^kokkos+rocm") and not (
+            spec.satisfies("^kokkos %cxx=clang") or spec.satisfies("^kokkos %cxx=rocmcc")
+        ):
+            args.append(self.define("CMAKE_CXX_COMPILER", spec["hip"].hipcc))
         return args
