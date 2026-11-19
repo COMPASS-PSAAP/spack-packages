@@ -62,6 +62,31 @@ class Parthenon(CMakePackage):
 
     conflicts("+host_comm_buffers", when="^kokkos~cuda~rocm")
 
+    @property
+    def uses_cray_gtl(self):
+        """Cray MPICH needs its GPU transport layer to send device buffers."""
+        spec = self.spec
+        return spec.satisfies("+mpi ~host_comm_buffers ^[virtuals=mpi] cray-mpich") and (
+            spec.satisfies("^kokkos+rocm") or spec.satisfies("^kokkos+cuda")
+        )
+
+    def flag_handler(self, name, flags):
+        # hipcc and nvcc_wrapper bypass Spack's compiler wrapper, so pass
+        # the GTL link flags through CMake
+        build_system_flags = []
+        if self.uses_cray_gtl:
+            build_system_flags = self.spec["cray-mpich"].package.gtl_lib.get(name, [])
+        return (flags, None, build_system_flags)
+
+    def setup_build_environment(self, env):
+        self.setup_run_environment(env)
+
+    def setup_run_environment(self, env):
+        if self.uses_cray_gtl:
+            env.set("MPICH_GPU_SUPPORT_ENABLED", "1")
+        if self.spec.satisfies("^kokkos+apu"):
+            env.set("HSA_XNACK", "1")
+
     def cmake_args(self):
         spec = self.spec
         args = [
