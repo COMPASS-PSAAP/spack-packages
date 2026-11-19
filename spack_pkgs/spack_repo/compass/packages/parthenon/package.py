@@ -71,14 +71,23 @@ class Parthenon(CMakePackage):
         )
 
     def flag_handler(self, name, flags):
-        # hipcc and nvcc_wrapper bypass Spack's compiler wrapper, so pass
-        # the GTL link flags through CMake
+        # CMake's MPI detection does not know about the GTL, so pass its
+        # link flags through CMake
         build_system_flags = []
         if self.uses_cray_gtl:
             build_system_flags = self.spec["cray-mpich"].package.gtl_lib.get(name, [])
         return (flags, None, build_system_flags)
 
     def setup_build_environment(self, env):
+        # Have Spack's compiler wrapper call hipcc or nvcc_wrapper, rather
+        # than replacing the wrapper, so it still adds the spec's rpaths
+        spec = self.spec
+        if spec.satisfies("^kokkos+wrapper"):
+            env.set("SPACK_CXX", self["kokkos"].kokkos_cxx)
+        elif spec.satisfies("^kokkos+rocm") and not (
+            spec.satisfies("^kokkos %cxx=clang") or spec.satisfies("^kokkos %cxx=rocmcc")
+        ):
+            env.set("SPACK_CXX", spec["hip"].hipcc)
         self.setup_run_environment(env)
 
     def setup_run_environment(self, env):
@@ -89,7 +98,7 @@ class Parthenon(CMakePackage):
 
     def cmake_args(self):
         spec = self.spec
-        args = [
+        return [
             self.define("PARTHENON_IMPORT_KOKKOS", True),
             self.define_from_variant("PARTHENON_SINGLE_PRECISION", "single"),
             self.define_from_variant("PARTHENON_ENABLE_HOST_COMM_BUFFERS", "host_comm_buffers"),
@@ -102,10 +111,3 @@ class Parthenon(CMakePackage):
             self.define("PARTHENON_DISABLE_EXAMPLES", not spec.variants["examples"].value),
             self.define("BUILD_TESTING", self.run_tests),
         ]
-        if spec.satisfies("^kokkos+wrapper"):
-            args.append(self.define("CMAKE_CXX_COMPILER", self["kokkos"].kokkos_cxx))
-        elif spec.satisfies("^kokkos+rocm") and not (
-            spec.satisfies("^kokkos %cxx=clang") or spec.satisfies("^kokkos %cxx=rocmcc")
-        ):
-            args.append(self.define("CMAKE_CXX_COMPILER", spec["hip"].hipcc))
-        return args
