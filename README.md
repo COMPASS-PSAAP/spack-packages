@@ -3,6 +3,13 @@ This repository contains a Spack package repository with custom Spack package fi
 
 This repository is a fork of the CUP-ECS PSAAP-III repo by the same name. The package files from this project are still included as a separate Spack repository.
 
+## Requirements:
+These packages require Spack 1.2 or newer, which uses the builtin package repository from `releases/v2026.06`. Older builtin releases lack Kokkos 5, which Parthenon needs, and use a Kokkos recipe format that the `cupecs` Cabana package cannot load. To get a suitable Spack:
+```bash
+git clone --depth=2 --branch=releases/v1.2 https://github.com/spack/spack.git ~/spack
+. ~/spack/share/spack/setup-env.sh
+```
+
 ## Automatic Setup:
 This project provides a helper script (`spack_setup_script.py`) that can take care of setting up system-specific package files as well as tweaking a few Spack settings for you. For the first run of the script, you will generally do something like the following (which is specific to an LLNL machine):
 ```bash
@@ -37,7 +44,7 @@ repos:
     destination: /g/g16/derek/.spack/package_repos/COMPASS
   builtin:
     git: https://github.com/spack/spack-packages.git
-    branch: releases/v2025.11
+    branch: releases/v2026.06
 ```
  5. Use Spack normally. Spack will automatically find libraries included in this repository.
  6. If Spack files for described packages already installed on the system are wanted, clone this repository and copy the system package file from `system_externals` to the location your Spack install is set up to look at (i.e., the value of `SPACK_USER_CONFIG_PATH`.) Be sure to reload/relog if doing this while Spack is active.
