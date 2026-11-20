@@ -18,7 +18,6 @@ class Parthenon(CMakePackage):
     license("BSD-3-Clause")
 
     version("develop", branch="develop")
-    version("kokkos-5.3", branch="kokkos-5.3")
 
     # ------------------------------------------------------------#
     # Variants
