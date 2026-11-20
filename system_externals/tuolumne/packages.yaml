@@ -1,5 +1,5 @@
 # Tuolumne packages.yaml
-# Version 1.0
+# Version 2.0
 packages:
   ##################################################################
   # General variants we always want on this system
@@ -30,17 +30,16 @@ packages:
         extra_rpaths:
         - /opt/cray/pe/gcc-libs
         - /opt/cray/pe/lib64/cce
-        - /opt/cray/lib64
         - /opt/cray/libfabric/2.1/lib64
   llvm:
     externals:
-    - spec: llvm@19.1.7+clang~flang+lld+lldb
+    - spec: llvm@21.1.8+clang~flang+lld+lldb
       prefix: /usr
       extra_attributes:
         compilers:
           c: /usr/bin/clang
           cxx: /usr/bin/clang++
-    - spec: llvm@19.1.7+clang~flang~lld~lldb
+    - spec: llvm@21.1.8+clang~flang~lld~lldb
       prefix: /usr/lib64/ccache
       extra_attributes:
         compilers:
@@ -173,7 +172,7 @@ packages:
       prefix: /usr
   rust:
     externals:
-    - spec: rust@1.84.1
+    - spec: rust@1.92.0
       prefix: /usr
       extra_attributes:
         cargo: /usr/bin/cargo
@@ -183,7 +182,7 @@ packages:
     externals:
     - spec: git@2.43.7+tcltk
       prefix: /usr
-    - spec: git@2.29.1+tcltk
+    - spec: git@2.56.1+tcltk
       prefix: /usr/tce
   libtool:
     externals:
@@ -223,7 +222,7 @@ packages:
     externals:
     - spec: python@3.6.8+bz2+crypt+ctypes+dbm+lzma+pyexpat~pythoncmd+readline+sqlite3+ssl+tix+tkinter+uuid+zlib
       prefix: /usr
-    - spec: python@3.9.12+bz2+crypt+ctypes+dbm+lzma+pyexpat~pythoncmd+readline+sqlite3+ssl+tix+tkinter+uuid+zlib
+    - spec: python@3.13.2+bz2+ctypes+curses+dbm~freethreading+lzma+pyexpat~pythoncmd+readline+sqlite3+ssl~tix+tkinter+uuid+zlib
       prefix: /usr/tce
   automake:
     externals:
@@ -269,90 +268,82 @@ packages:
   cray-mpich:
     buildable: false
     externals:
-    - spec: cray-mpich@9.0.1 +rocm amdgpu_target=gfx942 %gcc@11.2
-      prefix: /opt/cray/pe/mpich/9.0.1/ofi/gnu/11.2
+    - spec: cray-mpich@9.1.0 +rocm amdgpu_target=gfx942 %gcc@11.2
+      prefix: /opt/cray/pe/mpich/9.1.0/ofi/gnu/11.2
       extra_attributes:
         environment:
           prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/libfabric/2.1/lib64/
-    - spec: cray-mpich@9.0.1 +rocm amdgpu_target=gfx942 %rocmcc@6
-      prefix: /opt/cray/pe/mpich/9.0.1/ofi/rocm-compiler/6.0
+            LD_LIBRARY_PATH: /opt/cray/pe/lib64:/opt/cray/libfabric/2.1/lib64
+    - spec: cray-mpich@9.1.0 +rocm amdgpu_target=gfx942 %llvm-amdgpu@7.2.1
+      prefix: /opt/cray/pe/mpich/9.1.0/ofi/rocm-compiler/7.0
       extra_attributes:
         environment:
           prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/libfabric/2.1/lib64
-    - spec: cray-mpich@9.0.1 +rocm amdgpu_target=gfx942 %cce@20
-      prefix: /opt/cray/pe/mpich/9.0.1/ofi/crayclang/20.0
+            LD_LIBRARY_PATH: /opt/cray/pe/lib64:/opt/cray/libfabric/2.1/lib64
+    - spec: cray-mpich@9.1.0 +rocm amdgpu_target=gfx942 %cce@20
+      prefix: /opt/cray/pe/mpich/9.1.0/ofi/crayclang/20.0
       extra_attributes:
         environment:
           prepend_path:
-            LD_LIBRARY_PATH: /opt/cray/pe/lib64:/opt/cray/lib64:/opt/cray/libfabric/2.1/lib64
+            LD_LIBRARY_PATH: /opt/cray/pe/lib64:/opt/cray/libfabric/2.1/lib64
   cray-fftw:
     buildable: false
     externals:
-    - spec: cray-fftw@3.3.8.13
-      prefix: /opt/cray/pe/fftw/3.3.8.13
+    - spec: cray-fftw@3.3.10.11
+      prefix: /opt/cray/pe/fftw/3.3.10.11
     variants: precision=float,double,long_double
   hdf5:
     buildable: false
     externals:
-    - spec: hdf5@1.14.3.7 +mpi %cce@20
-      prefix: /opt/cray/pe/hdf5-parallel/1.14.3.7/crayclang/20.0
-    - spec: hdf5@1.13.3.7 +mpi %gcc@12.2.1
-      prefix: /opt/cray/pe/hdf5-parallel/1.14.3.7/gnu/12.2
+    - spec: hdf5@1.14.3.9 +mpi %cce@20
+      prefix: /opt/cray/pe/hdf5-parallel/1.14.3.9/crayclang/20.0
+    - spec: hdf5@1.14.3.9 +mpi %gcc@12.2.1
+      prefix: /opt/cray/pe/hdf5-parallel/1.14.3.9/gnu/12.2
+    - spec: hdf5@1.14.3.9 +mpi %llvm-amdgpu@7.2.1
+      prefix: /opt/cray/pe/hdf5-parallel/1.14.3.9/amd/7.0
   hip:
     buildable: false
     externals:
-    - spec: hip@6.4.2
-      prefix: /opt/rocm-6.4.2
+    - spec: hip@7.2.1
+      prefix: /opt/rocm-7.2.1
       extra_attributes:
         compilers:
-          hip: /opt/rocm-6.4.2/bin/hipcc
-  hip-rocclr:
-    buildable: false
-    externals:
-    - prefix: /opt/rocm-6.4.2/rocclr
-      spec: hip-rocclr@6.4.2 ^hsa-rocr-dev@6.4.2
+          hip: /opt/rocm-7.2.1/bin/hipcc
   hipblas:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: hipblas@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: hipblas@7.2.1
   hipcub:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: hipcub@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: hipcub@7.2.1
   hipfft:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: hipfft@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: hipfft@7.2.1
   hipfort:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: hipfort@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: hipfort@7.2.1
   hipify-clang:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: hipify-clang@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: hipify-clang@7.2.1
   hipsparse:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: hipsparse@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: hipsparse@7.2.1
   hsa-rocr-dev:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: hsa-rocr-dev@6.4.2
-  hsakmt-roct:
-    buildable: false
-    externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: hsakmt-roct@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: hsa-rocr-dev@7.2.1
   libfabric:
     buildable: true
     externals:
@@ -370,13 +361,18 @@ packages:
   llvm-amdgpu:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2/llvm
-      spec: llvm-amdgpu@6.4.2
+    - prefix: /opt/rocm-7.2.1/llvm
+      spec: llvm-amdgpu@7.2.1
+      extra_attributes:
+        compilers:
+          c: /opt/rocm-7.2.1/llvm/bin/amdclang
+          cxx: /opt/rocm-7.2.1/llvm/bin/amdclang++
+          fortran: /opt/rocm-7.2.1/llvm/bin/amdflang
   miopen-hip:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: miopen-hip@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: miopen-hip@7.2.1
   parallel-netcdf:
     buildable: true
     variants: +cxx+fortran
@@ -384,115 +380,105 @@ packages:
   rccl:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rccl@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rccl@7.2.1
   rocalution:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocalution@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocalution@7.2.1
   rocblas:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocblas@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocblas@7.2.1
   rocfft:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocfft@6.4.2
-  rocm-clang-ocl:
-    buildable: false
-    externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocm-clang-ocl@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocfft@7.2.1
   rocm-cmake:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocm-cmake@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocm-cmake@7.2.1
   rocm-device-libs:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocm-device-libs@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocm-device-libs@7.2.1
   rocm-gdb:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocm-gdb@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocm-gdb@7.2.1
   rocm-opencl:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2/opencl
-      spec: rocm-opencl@6.4.2
-  rocm-opencl-runtime:
-    buildable: false
-    externals:
-    - prefix: /opt/rocm-6.4.2/opencl
-      spec: rocm-opencl-runtime@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocm-opencl@7.2.1
   rocm-openmp-extras:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2/llvm
-      spec: rocm-openmp-extras@6.4.2
-  rocm-smi:
-    buildable: false
-    externals:
-    - prefix: /opt/rocm-6.4.2/rocm_smi
-      spec: rocm-smi@6.4.2
+    - prefix: /opt/rocm-7.2.1/llvm
+      spec: rocm-openmp-extras@7.2.1
   rocm-smi-lib:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2/rocm_smi
-      spec: rocm-smi-lib@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocm-smi-lib@7.2.1
+  amdsmi:
+    buildable: false
+    externals:
+    - prefix: /opt/rocm-7.2.1
+      spec: amdsmi@7.2.1
   rocminfo:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocminfo@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocminfo@7.2.1
   rocprim:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocprim@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocprim@7.2.1
   rocprofiler-dev:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocprofiler-dev@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocprofiler-dev@7.2.1
   rocrand:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocrand@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocrand@7.2.1
   rocsolver:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocsolver@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocsolver@7.2.1
   rocsparse:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocsparse@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocsparse@7.2.1
   rocthrust:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: rocthrust@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: rocthrust@7.2.1
   roctracer-dev:
     buildable: false
     externals:
-    - prefix: /opt/rocm-6.4.2
-      spec: roctracer-dev@6.4.2
+    - prefix: /opt/rocm-7.2.1
+      spec: roctracer-dev@7.2.1
   papi:
     buildable: false
     externals:
     - modules:
-      - papi/7.2.0.2
-      spec: papi@7.2.0.2
-    version: [7.2.0.2]
+      - papi/7.3.0.1
+      spec: papi@7.3.0.1
+    version: [7.3.0.1]
   #########################################################
   # Stuff we need for building on this system in particular
   #########################################################
