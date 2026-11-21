@@ -68,3 +68,4 @@ from spack.package import *
 This repository is also home to the collection of Spack `package.yaml` files that describe to Spack the external packages already on the system. These files can be found in the `system_externals` folder, and each file has a version number for easy comparison between versions. Currently, the following systems are available:
 - Dane
 - Tuolumne
+- Easley (UNM CARC), which upstreams to CARC's Spack installation
