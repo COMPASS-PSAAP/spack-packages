@@ -1,5 +1,5 @@
 # Tuolumne packages.yaml
-# Version 2.0
+# Version 2.1
 packages:
   ##################################################################
   # General variants we always want on this system
@@ -88,7 +88,7 @@ packages:
     externals:
     - spec: binutils@2.40~gold~headers
       prefix: /opt/cray/pe/cce/20.0.0/binutils/x86_64/x86_64-pc-linux-gnu
-    - spec: binutils@2.30.125~gold+headers
+    - spec: binutils@2.30.128~gold+headers
       prefix: /usr
     - spec: binutils@2.40.21~gold~headers
       prefix: /usr/tce
@@ -124,7 +124,7 @@ packages:
     externals:
     - spec: git-lfs@3.4.1
       prefix: /usr
-    - spec: git-lfs@2.11.0
+    - spec: git-lfs@3.8.1
       prefix: /usr/tce
   diffutils:
     externals:
@@ -230,7 +230,7 @@ packages:
       prefix: /usr
   go:
     externals:
-    - spec: go@1.24.4
+    - spec: go@1.26.7
       prefix: /usr
   bison:
     externals:

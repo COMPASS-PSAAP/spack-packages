@@ -1,16 +1,23 @@
 # Dane packages.yaml
-# Version 1.0
+# Version 2.0
 packages:
+  ##################################################################
+  # General settings for this system
+  ##################################################################
+  all:
+    providers:
+      # MVAPICH2 is Dane's default MPI module
+      mpi: [mvapich2, openmpi]
   bzip2:
     buildable: false
     externals:
     - spec: bzip2@1.0.6
-      prefix: /usr/bin
+      prefix: /usr
   cmake:
     buildable: false
     externals:
     - spec: cmake@3.30.5
-      prefix: /usr/tce/packages/cmake/cmake-3.30.5/
+      prefix: /usr/tce/packages/cmake/cmake-3.30.5
   gcc:
     externals:
     - spec: gcc@10.3.1 languages:='c,c++,fortran'
@@ -31,26 +38,44 @@ packages:
     buildable: false
     externals:
     - spec: gettext@0.19.8.1
-      prefix: /usr/bin
+      prefix: /usr
   hdf5:
     buildable: false
+    # Each TCE HDF5 is built against one MPI; naming it keeps Spack from
+    # pairing an HDF5 with the other MPI
     externals:
-    - spec: hdf5@1.14.0 +mpi %gcc@13.3.1
-      prefix: hdf5-1.14.0-mvapich2-2.3.7-gcc-13.3.1/
+    - spec: hdf5@1.14.0 +mpi
+      prefix: /usr/tce/packages/hdf5/hdf5-1.14.0-mvapich2-2.3.7-gcc-13.3.1
+      dependencies:
+      - id: mvapich2-gcc
+        deptypes: link
+        virtuals: mpi
+      - spec: gcc@13.3.1
+        deptypes: build
+        virtuals: c
+    - spec: hdf5@1.14.0 +mpi
+      prefix: /usr/tce/packages/hdf5/hdf5-1.14.0-openmpi-4.1.2-gcc-13.3.1
+      dependencies:
+      - id: openmpi-gcc
+        deptypes: link
+        virtuals: mpi
+      - spec: gcc@13.3.1
+        deptypes: build
+        virtuals: c
   libtool:
     buildable: false
     externals:
     - spec: libtool@2.4.6
-      prefix: /usr/bin
+      prefix: /usr
   llvm:
     externals:
-    - spec: llvm@19.1.7+clang~flang+lld+lldb
+    - spec: llvm@21.1.8+clang~flang+lld+lldb
       prefix: /usr
       extra_attributes:
         compilers:
           c: /usr/bin/clang
           cxx: /usr/bin/clang++
-    - spec: llvm@19.1.7+clang~flang~lld~lldb
+    - spec: llvm@21.1.8+clang~flang~lld~lldb
       prefix: /usr/lib64/ccache
       extra_attributes:
         compilers:
@@ -60,17 +85,19 @@ packages:
     buildable: false
     externals:
     - spec: m4@1.4.18
-      prefix: /usr/bin
+      prefix: /usr
   mvapich2:
     buildable: false
     externals:
     - spec: mvapich2@2.3.7 %gcc@13.3.1
-      prefix: /usr/tce/packages/mvapich2/mvapich2-2.3.7-gcc-13.3.1-magic/
+      prefix: /usr/tce/packages/mvapich2/mvapich2-2.3.7-gcc-13.3.1-magic
+      id: mvapich2-gcc
   openmpi:
     buildable: false
     externals:
     - spec: openmpi@4.1.2 %gcc@13.3.1
-      prefix: /usr/tce/packages/openmpi/openmpi-4.1.2-gcc-13.3.1-magic/
+      prefix: /usr/tce/packages/openmpi/openmpi-4.1.2-gcc-13.3.1-magic
+      id: openmpi-gcc
   papi:
     buildable: false
     externals:
@@ -82,7 +109,7 @@ packages:
     buildable: false
     externals:
     - spec: pkgconf@1.4.2
-      prefix: /usr/bin
+      prefix: /usr
   python:
     buildable: false
     externals:
@@ -94,9 +121,9 @@ packages:
     buildable: false
     externals:
     - spec: xz@5.2.4
-      prefix: /usr/bin
+      prefix: /usr
   zstd:
     buildable: false
     externals:
     - spec: zstd@1.4.4
-      prefix: /usr/bin
+      prefix: /usr
