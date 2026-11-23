@@ -1,0 +1,316 @@
+$ spack config scopes -p
+Scope                                                      Path
+command_line                                                
+spack                                                      /users/bridges/spack/etc/spack/
+user                                                       /tmp/tmp.ZJgr8Ip2Ur/user/
+user:/users/bridges/sp-test/system_externals/include.yaml  /users/bridges/sp-test/system_externals/include.yaml
+compass-hopper                                             /users/bridges/sp-test/system_externals/hopper/
+site                                                       /users/bridges/spack/etc/spack/site/
+system                                                     /etc/spack/
+defaults                                                   /users/bridges/spack/etc/spack/defaults/
+defaults:linux                                             /users/bridges/spack/etc/spack/defaults/linux/
+defaults:base                                              /users/bridges/spack/etc/spack/defaults/base/
+_builtin                                                    
+
+$ spack config get upstreams
+upstreams: {}
+
+$ spack config blame packages
+---                                                             packages:
+/etc/spack/packages.yaml:2                                        intel-oneapi-compilers-classic:
+/etc/spack/packages.yaml:3                                          externals:
+/etc/spack/packages.yaml:4                                          - spec: intel-oneapi-compilers-classic@19.1.3.304
+/etc/spack/packages.yaml:5                                            prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-20.0.4/intel-parallel-studio-cluster.2020.4-2xchappmdev2nhbx3liacvo6ttypta4e/compilers_and_libraries_2020.4.304/linux
+/etc/spack/packages.yaml:6                                            extra_attributes:
+/etc/spack/packages.yaml:7                                              compilers:
+/etc/spack/packages.yaml:8                                                c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-20.0.4/intel-parallel-studio-cluster.2020.4-2xchappmdev2nhbx3liacvo6ttypta4e/compilers_and_libraries_2020.4.304/linux/bin/intel64/icc
+/etc/spack/packages.yaml:9                                                cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-20.0.4/intel-parallel-studio-cluster.2020.4-2xchappmdev2nhbx3liacvo6ttypta4e/compilers_and_libraries_2020.4.304/linux/bin/intel64/icpc
+/etc/spack/packages.yaml:10                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-20.0.4/intel-parallel-studio-cluster.2020.4-2xchappmdev2nhbx3liacvo6ttypta4e/compilers_and_libraries_2020.4.304/linux/bin/intel64/ifort
+/etc/spack/packages.yaml:11                                         - spec: intel-oneapi-compilers-classic@19.0.5.281
+/etc/spack/packages.yaml:12                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-19.0.5/intel-parallel-studio-cluster.2019.5-xmb2xtyhr5mngkognx36af34onim2oag/compilers_and_libraries_2019.5.281/linux
+/etc/spack/packages.yaml:13                                           extra_attributes:
+/etc/spack/packages.yaml:14                                             compilers:
+/etc/spack/packages.yaml:15                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-19.0.5/intel-parallel-studio-cluster.2019.5-xmb2xtyhr5mngkognx36af34onim2oag/compilers_and_libraries_2019.5.281/linux/bin/intel64/icc
+/etc/spack/packages.yaml:16                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-19.0.5/intel-parallel-studio-cluster.2019.5-xmb2xtyhr5mngkognx36af34onim2oag/compilers_and_libraries_2019.5.281/linux/bin/intel64/icpc
+/etc/spack/packages.yaml:17                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-19.0.5/intel-parallel-studio-cluster.2019.5-xmb2xtyhr5mngkognx36af34onim2oag/compilers_and_libraries_2019.5.281/linux/bin/intel64/ifort
+/etc/spack/packages.yaml:18                                         - spec: intel-oneapi-compilers-classic@18.0.5
+/etc/spack/packages.yaml:19                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-18.0.4/intel-parallel-studio-cluster.2018.4-3ghm7ic3e5je7g3en22xpcbdlo6qg6uv/compilers_and_libraries_2018.5.274/linux
+/etc/spack/packages.yaml:20                                           extra_attributes:
+/etc/spack/packages.yaml:21                                             compilers:
+/etc/spack/packages.yaml:22                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-18.0.4/intel-parallel-studio-cluster.2018.4-3ghm7ic3e5je7g3en22xpcbdlo6qg6uv/compilers_and_libraries_2018.5.274/linux/bin/intel64/icc
+/etc/spack/packages.yaml:23                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-18.0.4/intel-parallel-studio-cluster.2018.4-3ghm7ic3e5je7g3en22xpcbdlo6qg6uv/compilers_and_libraries_2018.5.274/linux/bin/intel64/icpc
+/etc/spack/packages.yaml:24                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-18.0.4/intel-parallel-studio-cluster.2018.4-3ghm7ic3e5je7g3en22xpcbdlo6qg6uv/compilers_and_libraries_2018.5.274/linux/bin/intel64/ifort
+/etc/spack/packages.yaml:25                                       intel-oneapi-compilers:
+/etc/spack/packages.yaml:26                                         externals:
+/etc/spack/packages.yaml:27                                         - spec: intel-oneapi-compilers@2021.1
+/etc/spack/packages.yaml:28                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-20.0.4/intel-parallel-studio-cluster.2020.4-2xchappmdev2nhbx3liacvo6ttypta4e/compilers_and_libraries_2020.4.304/linux
+/etc/spack/packages.yaml:29                                           extra_attributes:
+/etc/spack/packages.yaml:30                                             compilers:
+/etc/spack/packages.yaml:31                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-20.0.4/intel-parallel-studio-cluster.2020.4-2xchappmdev2nhbx3liacvo6ttypta4e/compilers_and_libraries_2020.4.304/linux/bin/icx
+/etc/spack/packages.yaml:32                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/intel-20.0.4/intel-parallel-studio-cluster.2020.4-2xchappmdev2nhbx3liacvo6ttypta4e/compilers_and_libraries_2020.4.304/linux/bin/icpx
+/etc/spack/packages.yaml:33                                       gcc:
+/etc/spack/packages.yaml:34                                         externals:
+/etc/spack/packages.yaml:35                                         - spec: gcc@14.1.0 languages='c,c++,fortran'
+/etc/spack/packages.yaml:36                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-14.1.0-hw53s6xdodz7kqtu5svh462ny7covpdd
+/etc/spack/packages.yaml:37                                           extra_attributes:
+/etc/spack/packages.yaml:38                                             compilers:
+/etc/spack/packages.yaml:39                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-14.1.0-hw53s6xdodz7kqtu5svh462ny7covpdd/bin/gcc
+/etc/spack/packages.yaml:40                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-14.1.0-hw53s6xdodz7kqtu5svh462ny7covpdd/bin/g++
+/etc/spack/packages.yaml:41                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-14.1.0-hw53s6xdodz7kqtu5svh462ny7covpdd/bin/gfortran
+/etc/spack/packages.yaml:42                                         - spec: gcc@10.2.0 languages='c,c++,fortran'
+/etc/spack/packages.yaml:43                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-10.2.0-pdu5yvlu5ppdgd3jwr3ripq2rp22wlfm
+/etc/spack/packages.yaml:44                                           extra_attributes:
+/etc/spack/packages.yaml:45                                             compilers:
+/etc/spack/packages.yaml:46                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-10.2.0-pdu5yvlu5ppdgd3jwr3ripq2rp22wlfm/bin/gcc
+/etc/spack/packages.yaml:47                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-10.2.0-pdu5yvlu5ppdgd3jwr3ripq2rp22wlfm/bin/g++
+/etc/spack/packages.yaml:48                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-10.2.0-pdu5yvlu5ppdgd3jwr3ripq2rp22wlfm/bin/gfortran
+/etc/spack/packages.yaml:49                                         - spec: gcc@10.3.0 languages='c,c++,fortran'
+/etc/spack/packages.yaml:50                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-10.3.0-sifxelgym4tqz3ppthsuxj3fdzwhfpph
+/etc/spack/packages.yaml:51                                           extra_attributes:
+/etc/spack/packages.yaml:52                                             compilers:
+/etc/spack/packages.yaml:53                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-10.3.0-sifxelgym4tqz3ppthsuxj3fdzwhfpph/bin/gcc
+/etc/spack/packages.yaml:54                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-10.3.0-sifxelgym4tqz3ppthsuxj3fdzwhfpph/bin/g++
+/etc/spack/packages.yaml:55                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-10.3.0-sifxelgym4tqz3ppthsuxj3fdzwhfpph/bin/gfortran
+/etc/spack/packages.yaml:56                                         - spec: gcc@11.2.0 languages='c,c++,fortran'
+/etc/spack/packages.yaml:57                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-11.2.0-655htpcztc5mmb5d6kbe4i4j22ti2zc5
+/etc/spack/packages.yaml:58                                           extra_attributes:
+/etc/spack/packages.yaml:59                                             compilers:
+/etc/spack/packages.yaml:60                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-11.2.0-655htpcztc5mmb5d6kbe4i4j22ti2zc5/bin/gcc
+/etc/spack/packages.yaml:61                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-11.2.0-655htpcztc5mmb5d6kbe4i4j22ti2zc5/bin/g++
+/etc/spack/packages.yaml:62                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-11.2.0-655htpcztc5mmb5d6kbe4i4j22ti2zc5/bin/gfortran
+/etc/spack/packages.yaml:63                                         - spec: gcc@12.1.0 languages='c,c++,fortran'
+/etc/spack/packages.yaml:64                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-12.1.0-crtl4tekll36atmxstxm3m346irylu7t
+/etc/spack/packages.yaml:65                                           extra_attributes:
+/etc/spack/packages.yaml:66                                             compilers:
+/etc/spack/packages.yaml:67                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-12.1.0-crtl4tekll36atmxstxm3m346irylu7t/bin/gcc
+/etc/spack/packages.yaml:68                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-12.1.0-crtl4tekll36atmxstxm3m346irylu7t/bin/g++
+/etc/spack/packages.yaml:69                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-12.1.0-crtl4tekll36atmxstxm3m346irylu7t/bin/gfortran
+/etc/spack/packages.yaml:70                                         - spec: gcc@13.2.0 languages='c,c++,fortran'
+/etc/spack/packages.yaml:71                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-13.2.0-4u2zyp4mueiw2vfc2uewq2xyzgoykbje
+/etc/spack/packages.yaml:72                                           extra_attributes:
+/etc/spack/packages.yaml:73                                             compilers:
+/etc/spack/packages.yaml:74                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-13.2.0-4u2zyp4mueiw2vfc2uewq2xyzgoykbje/bin/gcc
+/etc/spack/packages.yaml:75                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-13.2.0-4u2zyp4mueiw2vfc2uewq2xyzgoykbje/bin/g++
+/etc/spack/packages.yaml:76                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-13.2.0-4u2zyp4mueiw2vfc2uewq2xyzgoykbje/bin/gfortran
+/etc/spack/packages.yaml:77                                         - spec: gcc@5.5.0 languages='c,c++,fortran'
+/etc/spack/packages.yaml:78                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-5.5.0-calazxbmg6c555qqjttwpx6dejfsk6lk
+/etc/spack/packages.yaml:79                                           extra_attributes:
+/etc/spack/packages.yaml:80                                             compilers:
+/etc/spack/packages.yaml:81                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-5.5.0-calazxbmg6c555qqjttwpx6dejfsk6lk/bin/gcc
+/etc/spack/packages.yaml:82                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-5.5.0-calazxbmg6c555qqjttwpx6dejfsk6lk/bin/g++
+/etc/spack/packages.yaml:83                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-5.5.0-calazxbmg6c555qqjttwpx6dejfsk6lk/bin/gfortran
+/etc/spack/packages.yaml:84                                         - spec: gcc@7.3.0 languages='c,c++,fortran'
+/etc/spack/packages.yaml:85                                           prefix: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-7.3.0-a4yb3jj52pqiy7c2b4vese5dqmuu7mf7
+/etc/spack/packages.yaml:86                                           extra_attributes:
+/etc/spack/packages.yaml:87                                             compilers:
+/etc/spack/packages.yaml:88                                               c: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-7.3.0-a4yb3jj52pqiy7c2b4vese5dqmuu7mf7/bin/gcc
+/etc/spack/packages.yaml:89                                               cxx: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-7.3.0-a4yb3jj52pqiy7c2b4vese5dqmuu7mf7/bin/g++
+/etc/spack/packages.yaml:90                                               fortran: /opt/spack/opt/spack/linux-rocky8-skylake_avx512/gcc-8.5.0/gcc-7.3.0-a4yb3jj52pqiy7c2b4vese5dqmuu7mf7/bin/gfortran
+/etc/spack/packages.yaml:91                                         - spec: gcc@8.5.0 languages='c,c++,fortran'
+/etc/spack/packages.yaml:92                                           prefix: /usr
+/etc/spack/packages.yaml:93                                           extra_attributes:
+/etc/spack/packages.yaml:94                                             compilers:
+/etc/spack/packages.yaml:95                                               c: /usr/bin/gcc
+/etc/spack/packages.yaml:96                                               cxx: /usr/bin/g++
+/etc/spack/packages.yaml:97                                               fortran: /usr/bin/gfortran
+/etc/spack/packages.yaml:98                                         prefer: [+binutils, +bootstrap]
+/etc/spack/packages.yaml:99                                       all:
+/etc/spack/packages.yaml:100                                        permissions:
+/etc/spack/packages.yaml:100                                          read: world
+/etc/spack/packages.yaml:100                                          write: group
+/etc/spack/packages.yaml:100                                          group: systems
+/etc/spack/packages.yaml:101                                        providers:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:21         blas: [netlib-lapack, amdblis, intel-oneapi-mkl, openblas]
+/etc/spack/packages.yaml:103                                          fftw-api: [fftw, amdfftw, intel-oneapi-mkl]
+/etc/spack/packages.yaml:104                                          flame: [libflame, amdlibflame, intel-oneapi-mkl]
+/etc/spack/packages.yaml:105                                          fortran-rt: [gcc-runtime, intel-oneapi-runtime]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:32         gl: [osmesa, egl, glx]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:35         go-or-gccgo-bootstrap: [go-bootstrap, gcc]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:34         golang: [go, gcc]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:39         java: [openjdk, jdk]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:41         lapack: [netlib-lapack, amdlibflame, intel-oneapi-mkl, openblas]
+/etc/spack/packages.yaml:111                                          libc: [glibc, musl]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:47         lua-lang: [lua-luajit-openresty, lua, lua-luajit]
+/etc/spack/packages.yaml:113                                          luajit: [lua-luajit-openresty, lua-luajit]
+/etc/spack/packages.yaml:114                                          mkl: [intel-oneapi-mkl]
+/etc/spack/packages.yaml:115                                          mpi: [openmpi, mpich, mvapich2, intel-oneapi-mpi]
+/etc/spack/packages.yaml:116                                          scalapack: [netlib-scalapack, amdscalapack, intel-oneapi-mkl]
+/etc/spack/packages.yaml:117                                          tbb: [intel-tbb]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:66         uuid: [libuuid, util-linux-uuid]
+/etc/spack/packages.yaml:119                                          zlib-api: [zlib-ng+compat, zlib]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:19         awk: [gawk]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:20         armci: [armcimpi]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:22         c: [gcc, llvm, intel-oneapi-compilers]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:23         cuda-lang: [cuda]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:24         cxx: [gcc, llvm, intel-oneapi-compilers]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:25         daal: [intel-oneapi-daal]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:26         elf: [elfutils]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:29         fortran: [gcc, llvm, intel-oneapi-compilers]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:31         fuse: [libfuse]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:33         glu: [mesa-glu, openglu]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:36         hip-lang: [llvm-amdgpu]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:37         iconv: [libiconv]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:38         ipp: [intel-oneapi-ipp]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:40         jpeg: [libjpeg-turbo, libjpeg]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:43         libgfortran: [gcc-runtime]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:44         libglx: [mesa+glx]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:45         libifcore: [intel-oneapi-runtime]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:46         libllvm: [llvm]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:49         mariadb-client: [mariadb-c-client, mariadb]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:51         mpe: [mpe2]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:53         mysql-client: [mysql, mariadb-c-client]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:54         opencl: [pocl]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:55         onedal: [intel-oneapi-dal]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:56         pbs: [openpbs, torque]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:57         pil: [py-pillow]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:58         pkgconfig: [pkgconf, pkg-config]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:59         qmake: [qt-base, qt]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:60         rpc: [libtirpc]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:62         sycl: [hipsycl]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:63         szip: [libaec, libszip]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:65         unwind: [libunwind]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:67         wasi-sdk: [wasi-sdk-prebuilt]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:68         xkbdata-api: [xkeyboard-config, xkbdata]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:69         xxd: [xxd-standalone, vim]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:70         yacc: [bison, byacc]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:71         ziglang: [zig]
+/etc/spack/packages.yaml:120                                        prefer:
+/etc/spack/packages.yaml:121                                        - +cxx
+/etc/spack/packages.yaml:122                                        - +fortran
+/etc/spack/packages.yaml:123                                        - +shared
+/etc/spack/packages.yaml:124                                        - +pic
+/etc/spack/packages.yaml:125                                        - +static
+/etc/spack/packages.yaml:126                                        - +mpi
+/etc/spack/packages.yaml:127                                        - libs=shared,static
+/etc/spack/packages.yaml:128                                        - +zlib
+/etc/spack/packages.yaml:129                                        - +xz
+/etc/spack/packages.yaml:130                                        - +bz2
+/etc/spack/packages.yaml:131                                        - +lzma
+/etc/spack/packages.yaml:132                                        - +ncurses
+/etc/spack/packages.yaml:133                                        - +curl
+/etc/spack/packages.yaml:134                                        - +ssl
+/etc/spack/packages.yaml:135                                        - tls=openssl
+/etc/spack/packages.yaml:136                                        - ~debug
+/etc/spack/packages.yaml:137                                        - ~dev
+/etc/spack/packages.yaml:138                                      openmpi:
+/etc/spack/packages.yaml:139                                        prefer:
+/etc/spack/packages.yaml:140                                        - fabrics=ucx
+/etc/spack/packages.yaml:141                                        - +cxx
+/etc/spack/packages.yaml:142                                        - '@4'
+/etc/spack/packages.yaml:143                                        conflict:
+/etc/spack/packages.yaml:144                                        - spec: '@4.1.8'
+/etc/spack/packages.yaml:145                                        require:
+/etc/spack/packages.yaml:146                                        - cflags="-I/usr/include/infiniband"
+/etc/spack/packages.yaml:147                                        - schedulers=slurm
+/etc/spack/packages.yaml:148                                        - spec: pmi=True
+/etc/spack/packages.yaml:149                                          when: '@:4'
+/etc/spack/packages.yaml:151                                      abinit:
+/etc/spack/packages.yaml:152                                        prefer: [+wannier90, +install-tests, +scalapack]
+/etc/spack/packages.yaml:153                                      apptainer:
+/etc/spack/packages.yaml:154                                        prefer:
+/etc/spack/packages.yaml:155                                        - +network
+/etc/spack/packages.yaml:156                                        require:
+/etc/spack/packages.yaml:157                                        - +suid
+/etc/spack/packages.yaml:158                                      mpich:
+/etc/spack/packages.yaml:159                                        require:
+/etc/spack/packages.yaml:160                                        - +slurm
+/etc/spack/packages.yaml:161                                        - pmi=pmi2
+/etc/spack/packages.yaml:162                                        prefer:
+/etc/spack/packages.yaml:163                                        - +verbs
+/etc/spack/packages.yaml:164                                        - netmod=ucx
+/etc/spack/packages.yaml:165                                      trilinos:
+/etc/spack/packages.yaml:166                                        prefer: [+amesos, +amesos2, +anasazi, +aztec, +belos, +boost, ~chaco, ~complex, ~debug, ~dtk, +epetra, +epetraext, +exodus, +explicit_template_instantiation, ~float, +fortran, +gtest, +hdf5, +hypre, +ifpack, +ifpack2, ~intrepid, ~intrepid2, ~isorropia, +kokkos, ~mesquite, ~minitensor, +ml, +muelu, +mumps, +nox, ~openmp, ~phalanx, ~piro, ~python, ~rol, ~rythmos, +sacado, ~shards, +shared, ~shylu, ~stk, +suite-sparse, ~superlu, ~superlu-dist, ~teko, ~tempus, +tpetra, ~x11, +zoltan, +zoltan2, build_type=RelWithDebInfo, gotype=long]
+/etc/spack/packages.yaml:167                                      ucx:
+/etc/spack/packages.yaml:168                                        prefer:
+/etc/spack/packages.yaml:169                                        - +dc
+/etc/spack/packages.yaml:170                                        - +dm
+/etc/spack/packages.yaml:171                                        - +ib_hw_tm
+/etc/spack/packages.yaml:172                                        - +mlx5_dv
+/etc/spack/packages.yaml:173                                        - +openmp
+/etc/spack/packages.yaml:174                                        - +rc
+/etc/spack/packages.yaml:175                                        - +rdmacm
+/etc/spack/packages.yaml:176                                        - +ud
+/etc/spack/packages.yaml:177                                        - +verbs
+/etc/spack/packages.yaml:178                                        - +cma
+/etc/spack/packages.yaml:179                                      libfabric:
+/etc/spack/packages.yaml:180                                        prefer:
+/etc/spack/packages.yaml:181                                        - fabrics=verbs,shm
+/etc/spack/packages.yaml:182                                      mpi:
+/etc/spack/packages.yaml:183                                        prefer: [openmpi]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:76     cce:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:77       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:78     cray-fftw:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:79       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:80     cray-libsci:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:81       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:82     cray-mpich:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:83       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:84     cray-mvapich2:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:85       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:86     cray-pmi:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:87       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:88     egl:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:89       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:90     essl:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:91       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:92     fj:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:93       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:94     fujitsu-mpi:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:95       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:96     fujitsu-ssl2:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:97       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:98     glibc:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:99       buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:100    hpcx-mpi:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:101      buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:102    iconv:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:103      prefer: [libiconv]
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:104    mpt:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:105      buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:106    musl:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:107      buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:108    opengl:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:109      buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:110    spectrum-mpi:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:111      buildable: False
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:112    xl:
+/users/bridges/spack/etc/spack/defaults/base/packages.yaml:113      buildable: False
+
+$ spack find | head -40
+
+$ spack find -lv gcc
+==> Error: No package matches the query: gcc
+(exit status 1)
+
+$ spack find -lv llvm
+==> Error: No package matches the query: llvm
+(exit status 1)
+
+$ spack find -lv cmake
+==> Error: No package matches the query: cmake
+(exit status 1)
+
+$ spack find -lv python
+==> Error: No package matches the query: python
+(exit status 1)
+
+$ spack find -lv cuda
+==> Error: No package matches the query: cuda
+(exit status 1)
+
+$ spack find -lv openmpi
+==> Error: No package matches the query: openmpi
+(exit status 1)
+
+$ spack find -lv mvapich2
+==> Error: No package matches the query: mvapich2
+(exit status 1)
+
+$ spack find -lv mpich
+==> Error: No package matches the query: mpich
+(exit status 1)
+
+$ spack find -lv hdf5
+==> Error: No package matches the query: hdf5
+(exit status 1)
+

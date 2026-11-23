@@ -1,0 +1,39 @@
+$ env SPACK_USER_CONFIG_PATH=/tmp/tmp.ZJgr8Ip2Ur/detect spack compiler find --scope user
+==> Added 1 new compiler to /tmp/tmp.ZJgr8Ip2Ur/detect/packages.yaml
+    gcc@8.5.0
+==> Compilers are defined in the following files:
+    /etc/spack/packages.yaml
+    /tmp/tmp.ZJgr8Ip2Ur/detect/packages.yaml
+
+$ env SPACK_USER_CONFIG_PATH=/tmp/tmp.ZJgr8Ip2Ur/detect spack external find --scope user
+==> Warning: "cmake@3.26.5" detected in "/usr/local" was already detected in "/usr"
+==> The following specs have been detected on this system and added to /tmp/tmp.ZJgr8Ip2Ur/detect/packages.yaml
+-- no arch / no compilers ---------------------------------------
+autoconf@2.69
+automake@1.16.1
+binutils@2.30.128
+bison@3.0.4
+cmake@3.26.5
+coreutils@8.30
+curl@7.61.1
+diffutils@3.6
+doxygen@1.8.14
+findutils@4.6.0
+flex@2.6.1
+gawk@4.2.1
+gettext@0.19.8.1
+git@2.43.7
+gmake@4.2.1
+groff@1.22.3
+libtool@2.4.6
+m4@1.4.18
+openssh@8.0p1
+openssl@1.1.1k
+perl@5.26.3
+pkgconf@1.4.2
+python@2.7.18
+python@3.6.8
+sed@4.5
+tar@1.30
+zlib@1.2.11
+
