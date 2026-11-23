@@ -1,0 +1,29 @@
+#!/bin/bash
+# Create a request directory from working/template/.
+#
+# Usage: working/bin/new-request <topic>
+#
+# <topic> is lowercase letters, digits, and hyphens. The request is named
+# <today>-<topic> so names sort by date and rarely collide.
+set -euo pipefail
+
+die() {
+  echo "new-request: $*" >&2
+  exit 1
+}
+
+[ $# -eq 1 ] || die "usage: working/bin/new-request <topic>"
+echo "$1" | grep -Eq '^[a-z0-9]+(-[a-z0-9]+)*$' ||
+  die "topic must be lowercase letters, digits, and hyphens: $1"
+
+root=$(git rev-parse --show-toplevel)
+name="$(date +%Y-%m-%d)-$1"
+dir="$root/working/requests/$name"
+[ ! -e "$dir" ] || die "working/requests/$name already exists"
+
+mkdir -p "$dir"
+sed "s/<name>/$name/g; s/<date>/$(date +%Y-%m-%d)/g" \
+  "$root/working/template/request.md" >"$dir/request.md"
+cp "$root/working/template/run.sh" "$dir/run.sh"
+chmod +x "$dir/run.sh"
+echo "working/requests/$name"
