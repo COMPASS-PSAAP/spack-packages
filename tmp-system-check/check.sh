@@ -1,7 +1,7 @@
 #!/bin/bash
-# Temporary: remove with tmp-carc-check/ before the pull request merges.
-# Checks the conditional system configuration on a UNM CARC system and
-# surveys what the system offers Spack. See tmp-carc-check/README.md.
+# Temporary: remove with tmp-system-check/ before the pull request merges.
+# Checks the conditional system configuration on a supported system and
+# surveys what the system offers Spack. See tmp-system-check/README.md.
 set -u
 
 here=$(cd "$(dirname "$0")" && pwd)
@@ -65,7 +65,7 @@ print("database version", d["version"], "with", len(d["installs"]), "installs")'
 
 # Where CARC keeps its own Spack, its release, and its database format,
 # which decides whether Spack 1.2.2 can read it as an upstream
-{
+[ -d /opt/spack ] && {
   run ls -ld /opt/spack /opt/spack/opt/spack
   echo "\$ ls -d /opt/*spack* /usr/local/*spack* /packages/*spack*"
   ls -d /opt/*spack* /usr/local/*spack* /packages/*spack* 2>&1
@@ -98,9 +98,11 @@ fi
   done
 } >"$out/include.txt"
 
-# How much of the upstream Spack reuses: "[^]" marks an upstream package
+# What Spack reuses: "[^]" marks an upstream package and "[e]" an
+# external; the plain hdf5 shows the system's preferred MPI
 {
   run spack spec -I cmake
+  run spack spec -I hdf5 +mpi
   run spack spec -I hdf5 +mpi ^openmpi
 } >"$out/reuse.txt"
 
@@ -118,4 +120,4 @@ if $compute; then
     'hostname; spack config scopes -p | grep compass' >"$out/compute.txt"
 fi
 
-echo "Results are in $out; commit and push them as tmp-carc-check/README.md says."
+echo "Results are in $out; commit and push them as tmp-system-check/README.md says."
