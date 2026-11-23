@@ -1,0 +1,100 @@
+$ date
+Mon Nov 23 12:39:58 PST 2026
+
+$ hostname
+tuolumne2152
+
+$ hostname -f
+tuolumne2152.llnl.gov
+
+$ uname -a
+Linux tuolumne2152 4.18.0-553.174.1.1toss.t4.x86_64 #1 SMP Thu Oct 15 13:31:04 PDT 2026 x86_64 x86_64 x86_64 GNU/Linux
+
+$ bash -lc declare -p CLUSTER
+declare -- CLUSTER="tuolumne"
+logout
+
+$ cat /etc/os-release
+NAME="Red Hat Enterprise Linux"
+VERSION="8.10 (Ootpa)"
+ID="rhel"
+ID_LIKE="fedora"
+VERSION_ID="8.10"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="Red Hat Enterprise Linux 8.10 (Ootpa)"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:8::baseos"
+HOME_URL="https://www.redhat.com/"
+DOCUMENTATION_URL="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8"
+BUG_REPORT_URL="https://issues.redhat.com/"
+
+REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 8"
+REDHAT_BUGZILLA_PRODUCT_VERSION=8.10
+REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
+REDHAT_SUPPORT_PRODUCT_VERSION="8.10"
+
+$ env | grep -E 'CLUSTER|SYS_TYPE|CARC|LMOD_SYSTEM|SLURM_CONF'
+LMOD_SYSTEM_DEFAULT_MODULES=craype-x86-trento:craype-network-ofi:perftools-base:PrgEnv-cray:StdEnv
+MV2_HOMOGENEOUS_CLUSTER=1
+SYS_TYPE=toss_4_x86_64_ib_cray
+LCSCHEDCLUSTER=tuolumne
+
+$ lscpu
+Architecture:         x86_64
+CPU op-mode(s):       32-bit, 64-bit
+Byte Order:           Little Endian
+CPU(s):               192
+On-line CPU(s) list:  0-95
+Off-line CPU(s) list: 96-191
+Thread(s) per core:   1
+Core(s) per socket:   24
+Socket(s):            4
+NUMA node(s):         4
+Vendor ID:            AuthenticAMD
+CPU family:           25
+Model:                144
+Model name:           AMD Instinct MI300A Accelerator
+Stepping:             1
+CPU MHz:              3700.000
+CPU max MHz:          3700.0000
+CPU min MHz:          1500.0000
+BogoMIPS:             7399.99
+Virtualization:       AMD-V
+L1d cache:            32K
+L1i cache:            32K
+L2 cache:             1024K
+L3 cache:             32768K
+NUMA node0 CPU(s):    0-23
+NUMA node1 CPU(s):    24-47
+NUMA node2 CPU(s):    48-71
+NUMA node3 CPU(s):    72-95
+Flags:                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good amd_lbr_v2 nopl nonstop_tsc cpuid extd_apicid aperfmperf pni pclmulqdq monitor ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 invpcid_single hw_pstate ssbd mba perfmon_v2 ibrs ibpb stibp ibrs_enhanced vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local avx512_bf16 clzero irperf xsaveerptr wbnoinvd amd_ppin cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif x2avic v_spec_ctrl avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid overflow_recov succor smca fsrm flush_l1d
+
+$ nvidia-smi --query-gpu=name,compute_cap,driver_version --format=csv
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
+
+(exit status 9)
+
+$ sinfo -s
+PARTITION AVAIL  TIMELIMIT   NODES(A/I/O/T) NODELIST
+pall       down         1d   1091/53/0/1144 tuolumne[1005,1007,2147-2148],tuolumne[1010,1013,1017,1019,1047],tuolumne[1054,1094,1096,1116,1136,1177,1182,1208,1219,1231,1271,1297,1318,1328,1434,1454,1483,1532-1533,1554,1562,1578,1588,1596,1624,1635,1637,1689,1695,1713,1749,1790,1832,1834,1893,1908,1966,1977,2011,2037,2044,2096,2109,2122],tuolumne[1006,1008],tuolumne[1009,1011-1012,1014-1016,1018,1020-1046,1048],tuolumne[1049-1053,1055-1093,1095,1097-1115,1117-1135,1137-1176,1178-1181,1183-1207,1209-1218,1220-1230,1232-1270,1272-1296,1298-1317,1319-1327,1329-1433,1435-1453,1455-1482,1484-1531,1534-1553,1555-1561,1563-1577,1579-1587,1589-1595,1597-1623,1625-1634,1636,1638-1688,1690-1694,1696-1712,1714-1748,1750-1789,1791-1831,1833,1835-1892,1894-1907,1909-1965,1967-1976,1978-2010,2012-2036,2038-2043,2045-2095,2097-2108,2110-2121,2123-2146],
+pbatch       up         1d   1054/44/0/1098 tuolumne[1054,1094,1096,1116,1136,1177,1182,1208,1219,1231,1271,1297,1318,1328,1434,1454,1483,1532-1533,1554,1562,1578,1588,1596,1624,1635,1637,1689,1695,1713,1749,1790,1832,1834,1893,1908,1966,1977,2011,2037,2044,2096,2109,2122],tuolumne[1049-1053,1055-1093,1095,1097-1115,1117-1135,1137-1176,1178-1181,1183-1207,1209-1218,1220-1230,1232-1270,1272-1296,1298-1317,1319-1327,1329-1433,1435-1453,1455-1482,1484-1531,1534-1553,1555-1561,1563-1577,1579-1587,1589-1595,1597-1623,1625-1634,1636,1638-1688,1690-1694,1696-1712,1714-1748,1750-1789,1791-1831,1833,1835-1892,1894-1907,1909-1965,1967-1976,1978-2010,2012-2036,2038-2043,2045-2095,2097-2108,2110-2121,2123-2146],
+pci          up         4h      2/4/0/6 tuolumne[1005,1007,2147-2148],tuolumne[1006,1008],
+pdebug       up         1h     35/5/0/40 tuolumne[1010,1013,1017,1019,1047],tuolumne[1009,1011-1012,1014-1016,1018,1020-1046,1048],
+
+$ which -a spack
+spack ()
+{ 
+    : this is a shell function from: /g/g16/bridges7/spack/share/spack/setup-env.sh;
+    : the real spack script is here: /g/g16/bridges7/spack/bin/spack;
+    _spack_shell_wrapper "$@";
+    return $?
+}
+/g/g16/bridges7/spack/bin/spack
+
+$ spack --version
+1.2.2 (3e19345b6e12f5ff1b874f4059622fc6a1fd804a)
+
+$ spack arch
+linux-rhel8-zen4
+
