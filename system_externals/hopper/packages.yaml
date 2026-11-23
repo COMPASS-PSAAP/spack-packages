@@ -1,7 +1,8 @@
 # Hopper packages.yaml
-# Version 0.1
+# Version 1.0
 #
-# A placeholder that names nothing, so Spack's choice of Hopper can be
-# checked before Hopper's externals or upstream are known. It is filled
-# in from tmp-carc-check's results on Hopper.
+# CARC's own Spack installation supplies Hopper's compilers, CUDA, MPI,
+# and HDF5, so this file names no externals. upstreams.yaml, beside this
+# file, points your Spack at it as an upstream; include.yaml applies both
+# on Hopper only.
 packages: {}

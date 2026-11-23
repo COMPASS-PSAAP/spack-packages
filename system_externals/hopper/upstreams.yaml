@@ -1,0 +1,8 @@
+# Hopper upstreams.yaml
+# Version 1.0
+#
+# Reuse what CARC's own Spack installation has built: Hopper's compilers,
+# CUDA, MPI, and HDF5. Its database is format 8, which Spack 1.2 reads.
+upstreams:
+  carc-spack:
+    install_tree: /opt/spack/opt/spack
