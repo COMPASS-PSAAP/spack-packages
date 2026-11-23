@@ -6,10 +6,10 @@ a feature branch; a person reads the request, runs it, and commits the
 results to the same branch; the agent pulls the results and continues.
 This directory holds those requests and the scripts that move them.
 
-The exchange is optional. A repository that never runs on HPC systems
-deletes `working/`, `results/`, and
-`.github/workflows/working-directory.yml`, and records that in
-`CHANGELOG.md`.
+This repository uses the exchange only to test its system configuration
+on the systems it manages, so it keeps no promoted results and has no
+`results/` directory. The template's copy of this file describes
+promotion for repositories that need it.
 
 Only the skeleton of this directory merges into the default branch: this
 file, `bin/`, and `template/`. Requests live on feature branches, and the
@@ -104,24 +104,15 @@ of the experiment.
   checking the installed file itself, rather than letting every run fail
   the same way.
 
-## Keeping a result
-
-Most exchanged output is disposable. A result a pull request relies on,
-or a baseline, is promoted: a person copies the whole request directory,
-with `request.md`, `run.sh`, and `results/`, into `results/` at the top of
-the repository, following `results/README.md`, or copies its artifacts
-into the tests with its `manifest.md`, so they record their source. Promotion
-is a person's decision; an agent may propose it.
-
 ## Merging
 
 Before a feature branch's pull request into the default branch is
-merged, promote what should be kept, then remove the requests:
+merged, remove the requests:
 
     git rm -r working/requests
     git commit -m "Remove exchanged requests before merging"
     working/bin/check --merge
 
 Merge with a squash merge, so the exchanged files never enter the history
-of the default branch. The feature branch keeps the full exchange for as
-long as the branch exists.
+of the default branch. The pull request keeps the full exchange, through
+its commits, after the branch is deleted.
