@@ -1,5 +1,0 @@
-$ flux run -N 1 -t 5m bash -c hostname; spack config scopes -p | grep compass
-tuolumne2047
-flux-job: task(s) exited with exit code 1
-(exit status 1)
-
