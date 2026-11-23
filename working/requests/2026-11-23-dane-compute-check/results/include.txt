@@ -1,0 +1,304 @@
+$ spack config scopes -p
+Scope                                                              Path
+command_line                                                        
+spack                                                              /g/g16/bridges7/spack/etc/spack/
+user                                                               /g/g16/bridges7/.system-check.9ZOvIk/user/
+user:/g/g16/bridges7/spack-packages/system_externals/include.yaml  /g/g16/bridges7/spack-packages/system_externals/include.yaml
+compass-dane                                                       /g/g16/bridges7/spack-packages/system_externals/dane/
+site                                                               /g/g16/bridges7/spack/etc/spack/site/
+system                                                             /etc/spack/
+defaults                                                           /g/g16/bridges7/spack/etc/spack/defaults/
+defaults:linux                                                     /g/g16/bridges7/spack/etc/spack/defaults/linux/
+defaults:base                                                      /g/g16/bridges7/spack/etc/spack/defaults/base/
+_builtin                                                            
+
+$ spack config get upstreams
+upstreams: {}
+
+$ spack config blame packages
+---                                                                     packages:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:7      all:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:8        providers:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:52                mpi: [mvapich2, openmpi, mpich]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:19                awk: [gawk]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:20                armci: [armcimpi]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:21                blas: [openblas]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:22                c: [gcc, llvm, intel-oneapi-compilers]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:23                cuda-lang: [cuda]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:24                cxx: [gcc, llvm, intel-oneapi-compilers]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:25                daal: [intel-oneapi-daal]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:26                elf: [elfutils]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:27                fftw-api: [fftw, amdfftw]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:28                flame: [libflame, amdlibflame]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:29                fortran: [gcc, llvm, intel-oneapi-compilers]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:30                fortran-rt: [gcc-runtime, intel-oneapi-runtime]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:31                fuse: [libfuse]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:32                gl: [glx, osmesa]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:33                glu: [mesa-glu, openglu]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:34                golang: [go, gcc]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:35                go-or-gccgo-bootstrap: [go-bootstrap, gcc]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:36                hip-lang: [llvm-amdgpu]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:37                iconv: [libiconv]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:38                ipp: [intel-oneapi-ipp]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:39                java: [openjdk, jdk]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:40                jpeg: [libjpeg-turbo, libjpeg]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:41                lapack: [openblas]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:42                libc: [glibc, musl]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:43                libgfortran: [gcc-runtime]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:44                libglx: [mesa+glx]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:45                libifcore: [intel-oneapi-runtime]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:46                libllvm: [llvm]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:47                lua-lang: [lua, lua-luajit-openresty, lua-luajit]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:48                luajit: [lua-luajit-openresty, lua-luajit]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:49                mariadb-client: [mariadb-c-client, mariadb]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:50                mkl: [intel-oneapi-mkl]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:51                mpe: [mpe2]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:53                mysql-client: [mysql, mariadb-c-client]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:54                opencl: [pocl]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:55                onedal: [intel-oneapi-dal]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:56                pbs: [openpbs, torque]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:57                pil: [py-pillow]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:58                pkgconfig: [pkgconf, pkg-config]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:59                qmake: [qt-base, qt]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:60                rpc: [libtirpc]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:61                scalapack: [netlib-scalapack, amdscalapack]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:62                sycl: [hipsycl]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:63                szip: [libaec, libszip]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:64                tbb: [intel-tbb]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:65                unwind: [libunwind]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:66                uuid: [util-linux-uuid, libuuid]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:67                wasi-sdk: [wasi-sdk-prebuilt]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:68                xkbdata-api: [xkeyboard-config, xkbdata]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:69                xxd: [xxd-standalone, vim]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:70                yacc: [bison, byacc]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:71                ziglang: [zig]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:72                zlib-api: [zlib-ng+compat, zlib]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:73              permissions:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:74                read: world
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:75                write: user
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:11     bzip2:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:12       buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:13       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:14       - spec: bzip2@1.0.6
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:15         prefix: /usr
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:16     cmake:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:17       buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:18       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:19       - spec: cmake@3.30.5
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:20         prefix: /usr/tce/packages/cmake/cmake-3.30.5
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:21     gcc:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:22       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:23       - spec: gcc@10.3.1 languages:='c,c++,fortran'
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:24         prefix: /usr/tce
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:25         extra_attributes:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:26           compilers:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:27             c: /usr/tce/bin/gcc
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:28             cxx: /usr/tce/bin/g++
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:29             fortran: /usr/tce/bin/gfortran
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:30       - spec: gcc@13.3.1 languages:='c,c++,fortran'
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:31         prefix: /usr/tce/packages/gcc/gcc-13.3.1-magic
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:32         extra_attributes:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:33           compilers:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:34             c: /usr/tce/packages/gcc/gcc-13.3.1-magic/bin/gcc
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:35             cxx: /usr/tce/packages/gcc/gcc-13.3.1-magic/bin/g++
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:36             fortran: /usr/tce/packages/gcc/gcc-13.3.1-magic/bin/gfortran
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:37     gettext:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:38       buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:39       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:40       - spec: gettext@0.19.8.1
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:41         prefix: /usr
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:42     hdf5:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:43       buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:46       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:47       - spec: hdf5@1.14.0 +mpi
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:48         prefix: /usr/tce/packages/hdf5/hdf5-1.14.0-mvapich2-2.3.7-gcc-13.3.1
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:49         dependencies:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:50         - id: mvapich2-gcc
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:51           deptypes: link
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:52           virtuals: mpi
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:53         - spec: gcc@13.3.1
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:54           deptypes: build
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:55           virtuals: c
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:56       - spec: hdf5@1.14.0 +mpi
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:57         prefix: /usr/tce/packages/hdf5/hdf5-1.14.0-openmpi-4.1.2-gcc-13.3.1
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:58         dependencies:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:59         - id: openmpi-gcc
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:60           deptypes: link
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:61           virtuals: mpi
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:62         - spec: gcc@13.3.1
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:63           deptypes: build
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:64           virtuals: c
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:65     libtool:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:66       buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:67       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:68       - spec: libtool@2.4.6
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:69         prefix: /usr
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:70     llvm:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:71       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:72       - spec: llvm@21.1.8+clang~flang+lld+lldb
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:73         prefix: /usr
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:74         extra_attributes:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:75           compilers:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:76             c: /usr/bin/clang
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:77             cxx: /usr/bin/clang++
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:78       - spec: llvm@21.1.8+clang~flang~lld~lldb
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:79         prefix: /usr/lib64/ccache
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:80         extra_attributes:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:81           compilers:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:82             c: /usr/lib64/ccache/clang
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:83             cxx: /usr/lib64/ccache/clang++
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:84     m4:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:85       buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:86       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:87       - spec: m4@1.4.18
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:88         prefix: /usr
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:89     mvapich2:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:90       buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:91       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:92       - spec: mvapich2@2.3.7 %gcc@13.3.1
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:93         prefix: /usr/tce/packages/mvapich2/mvapich2-2.3.7-gcc-13.3.1-magic
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:94         id: mvapich2-gcc
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:95     openmpi:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:96       buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:97       externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:98       - spec: openmpi@4.1.2 %gcc@13.3.1
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:99         prefix: /usr/tce/packages/openmpi/openmpi-4.1.2-gcc-13.3.1-magic
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:100        id: openmpi-gcc
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:101    papi:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:102      buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:103      externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:104      - modules:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:105        - papi/6.0.0.1
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:106        spec: papi@6.0.0.1
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:107      version: [6.0.0.1]
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:108    pkgconf:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:109      buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:110      externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:111      - spec: pkgconf@1.4.2
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:112        prefix: /usr
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:113    python:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:114      buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:115      externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:116      - modules:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:117        - python/3.13.2
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:118        spec: python@3.13.2
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:119      version: [3.13.2]
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:120    xz:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:121      buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:122      externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:123      - spec: xz@5.2.4
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:124        prefix: /usr
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:125    zstd:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:126      buildable: False
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:127      externals:
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:128      - spec: zstd@1.4.4
+/g/g16/bridges7/spack-packages/system_externals/dane/packages.yaml:129        prefix: /usr
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:76            cce:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:77              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:78            cray-fftw:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:79              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:80            cray-libsci:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:81              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:82            cray-mpich:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:83              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:84            cray-mvapich2:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:85              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:86            cray-pmi:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:87              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:88            egl:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:89              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:90            essl:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:91              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:92            fj:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:93              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:94            fujitsu-mpi:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:95              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:96            fujitsu-ssl2:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:97              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:98            glibc:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:99              buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:100           hpcx-mpi:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:101             buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:102           iconv:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:103             prefer: [libiconv]
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:104           mpt:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:105             buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:106           musl:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:107             buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:108           opengl:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:109             buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:110           spectrum-mpi:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:111             buildable: False
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:112           xl:
+/g/g16/bridges7/spack/etc/spack/defaults/base/packages.yaml:113             buildable: False
+
+$ spack find | head -40
+-- linux-rhel8-x86_64 / %c=cce@20.0.0 ---------------------------
+cray-mpich@9.1.0
+hdf5@1.14.3.9
+
+-- linux-rhel8-x86_64 / no compilers ----------------------------
+cce@20.0.0
+cmake@3.26.5
+glibc@2.28
+gmake@4.2.1
+hip@7.2.1
+hsa-rocr-dev@7.2.1
+libfabric@2.3.0rc1
+libnl@3.7.0
+llvm-amdgpu@7.2.1
+numactl@2.0.16
+rdma-core@48.0
+rocthrust@7.2.1
+ucx@1.15.0
+zlib@1.2.11
+
+-- linux-rhel8-zen4 / %c,cxx=cce@20.0.0 -------------------------
+parthenon@git.7b277f70ffe71682575d8b79fd6906b535661a37=develop
+parthenon@git.7b277f70ffe71682575d8b79fd6906b535661a37=develop
+parthenon@git.7b277f70ffe71682575d8b79fd6906b535661a37=develop
+
+-- linux-rhel8-zen4 / %cxx=cce@20.0.0 ---------------------------
+kokkos@5.2.2
+kokkos@5.2.2
+kokkos@5.2.2
+
+-- linux-rhel8-zen4 / no compilers ------------------------------
+compiler-wrapper@1.1.0
+
+$ spack find -lv gcc
+==> Error: No package matches the query: gcc
+(exit status 1)
+
+$ spack find -lv llvm
+==> Error: No package matches the query: llvm
+(exit status 1)
+
+$ spack find -lv cmake
+-- linux-rhel8-x86_64 / no compilers ----------------------------
+rok62g2 cmake@3.26.5~doc+ncurses+ownlibs~qtgui build_system=generic build_type=Release
+
+$ spack find -lv python
+==> Error: No package matches the query: python
+(exit status 1)
+
+$ spack find -lv cuda
+==> Error: No package matches the query: cuda
+(exit status 1)
+
+$ spack find -lv openmpi
+==> Error: No package matches the query: openmpi
+(exit status 1)
+
+$ spack find -lv mvapich2
+==> Error: No package matches the query: mvapich2
+(exit status 1)
+
+$ spack find -lv mpich
+==> Error: No package matches the query: mpich
+(exit status 1)
+
+$ spack find -lv hdf5
+-- linux-rhel8-x86_64 / %c=cce@20.0.0 ---------------------------
+lvukksf hdf5@1.14.3.9~cxx~fortran~hl~java~map+mpi+shared~subfiling~szip~threadsafe+tools api=default build_system=cmake build_type=Release generator=make
+
