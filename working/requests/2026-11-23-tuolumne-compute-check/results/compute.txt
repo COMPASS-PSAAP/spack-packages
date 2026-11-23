@@ -1,0 +1,15 @@
+$ flux run -N 1 -t 5m bash -c hostname; spack config scopes -p
+tuolumne1540
+Scope                                                              Path
+command_line                                                        
+spack                                                              /g/g16/bridges7/spack/etc/spack/
+user                                                               /g/g16/bridges7/.system-check.QSs33P/user/
+user:/g/g16/bridges7/spack-packages/system_externals/include.yaml  /g/g16/bridges7/spack-packages/system_externals/include.yaml
+compass-tuolumne                                                   /g/g16/bridges7/spack-packages/system_externals/tuolumne/
+site                                                               /g/g16/bridges7/spack/etc/spack/site/
+system                                                             /etc/spack/
+defaults                                                           /g/g16/bridges7/spack/etc/spack/defaults/
+defaults:linux                                                     /g/g16/bridges7/spack/etc/spack/defaults/linux/
+defaults:base                                                      /g/g16/bridges7/spack/etc/spack/defaults/base/
+_builtin                                                            
+
