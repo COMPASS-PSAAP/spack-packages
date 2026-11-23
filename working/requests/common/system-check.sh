@@ -24,7 +24,10 @@ case $(spack --version) in
 esac
 
 mkdir -p "$out"
-scope=$(mktemp -d)
+# In the home directory, which compute nodes share. mktemp's default,
+# $TMPDIR, put it in /var/tmp on Dane and Tuolumne, probably node-local:
+# their compute jobs listed no compass scope
+scope=$(mktemp -d "$HOME/.system-check.XXXXXX")
 trap 'rm -rf "$scope"' EXIT
 mkdir -p "$scope/user" "$scope/detect"
 printf 'include:\n- path: %s/system_externals/include.yaml\n' "$repo" \
@@ -118,7 +121,7 @@ fi
 [ -f "$scope/detect/packages.yaml" ] &&
   cp "$scope/detect/packages.yaml" "$out/detected-packages.yaml"
 
-on_compute='hostname; spack config scopes -p | grep compass'
+on_compute='hostname; spack config scopes -p'
 case $scheduler in
   slurm) run srun -N 1 -n 1 -t 00:05:00 bash -c "$on_compute" >"$out/compute.txt" ;;
   flux) run flux run -N 1 -t 5m bash -c "$on_compute" >"$out/compute.txt" ;;
