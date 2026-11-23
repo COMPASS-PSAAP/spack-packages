@@ -1,0 +1,22 @@
+# Includes each system's configuration on that system only. A user's
+# ~/.spack/include.yaml includes this file, and Spack evaluates each
+# entry's `when:` every time it starts, so one home directory shared by
+# several clusters gets the right configuration on each. Paths are
+# relative to this file.
+#
+# Each entry names its system three ways, in this order: COMPASS_SYSTEM,
+# which anyone can set to choose a system by hand; CLUSTER, which LLNL
+# sets on its machines; and, where a system has neither, a pattern on
+# its hostnames.
+include:
+- name: compass-dane
+  path: dane
+  when: env.get("COMPASS_SYSTEM", env.get("CLUSTER")) == "dane"
+- name: compass-tuolumne
+  path: tuolumne
+  when: env.get("COMPASS_SYSTEM", env.get("CLUSTER")) == "tuolumne"
+# UNM CARC's Easley: the login node is "easley" and compute nodes are
+# "easley001" and up
+- name: compass-easley
+  path: easley
+  when: env.get("COMPASS_SYSTEM") == "easley" or ("COMPASS_SYSTEM" not in env and re.match(r"easley\d*(\.|$)", hostname))

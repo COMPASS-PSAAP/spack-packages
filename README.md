@@ -11,14 +11,14 @@ git clone --depth=2 --branch=releases/v1.2 https://github.com/spack/spack.git ~/
 ```
 
 ## Automatic Setup:
-This project provides a helper script (`spack_setup_script.py`) that can take care of setting up system-specific package files as well as tweaking a few Spack settings for you. For the first run of the script, you will generally do something like the following (which is specific to an LLNL machine):
+This project provides a helper script (`spack_setup_script.py`) that can take care of setting up system-specific package files as well as tweaking a few Spack settings for you. For the first run of the script, you will generally do something like the following, on any system:
 ```bash
 # Basic First-time Setup
-python3 spack_setup_script.py -R -S $CLUSTER
+python3 spack_setup_script.py -R
 # Advanced First-time Setup -- The file after "-E" depends on your setup
-python3 spack_setup_script.py -R -S $CLUSTER -E .bashrc
+python3 spack_setup_script.py -R -E .bashrc
 # Getting Updates (-E is not needed, but can be added if not used before)
-python3 spack_setup_script.py -U -R -S $CLUSTER 
+python3 spack_setup_script.py -U -R
 ```
 Some options require Spack to be loaded in the environment, so it is a good idea to make sure that it is loaded before you run this tool. We've set this script up with output messages that outline what it is doing, but the individual steps are also outlined in the python file itself. To update your local files with any potential updates, add the `-U` flag to have the script do a `git pull` before running. In addition to updating this Git repository, running with `-U` with `-R` will also request Spack to pull the updates for the Spack package repositories provided by this project, though Spack will do nothing if `-R` has not been previously run without `-U`. For more details on the flags, run with `--help`
 
@@ -47,7 +47,11 @@ repos:
     branch: releases/v2026.06
 ```
  5. Use Spack normally. Spack will automatically find libraries included in this repository.
- 6. If Spack files for described packages already installed on the system are wanted, clone this repository and copy the system package file from `system_externals` to the location your Spack install is set up to look at (i.e., the value of `SPACK_USER_CONFIG_PATH`.) Be sure to reload/relog if doing this while Spack is active.
+ 6. To use the configuration for the systems in `system_externals`, include it from your Spack user scope by adding this to `~/.spack/include.yaml` (the path is the destination from step 2):
+```yaml
+include:
+- path: ~/.spack/package_repos/COMPASS/system_externals/include.yaml
+```
 
 
 ## Package Creation:
@@ -65,7 +69,18 @@ from spack.package import *
 ```
 
 ## System External Packages
-This repository is also home to the collection of Spack `package.yaml` files that describe to Spack the external packages already on the system. These files can be found in the `system_externals` folder, and each file has a version number for easy comparison between versions. Currently, the following systems are available:
+This repository is also home to the collection of Spack configuration for each system: `packages.yaml` files that describe to Spack the external packages already on the system, and any other settings a system needs, such as Easley's `upstreams.yaml`. These files can be found in the `system_externals/<system>` folders, and each file has a version number for easy comparison between versions.
+
+`system_externals/include.yaml` includes each system's folder on that system only, and `-R`, or step 6 of the manual setup, includes it from your user scope. Spack evaluates its conditions every time it starts, so a home directory shared by several clusters gets the right configuration on each, and `spack repo update COMPASSRepo` (or `-U -R`) updates it along with the packages. Each system is recognized from, in order:
+- `COMPASS_SYSTEM`, which you can set to a folder name to choose a system by hand
+- `CLUSTER`, which LLNL sets on its machines
+- a pattern on the system's hostnames, for systems that set neither
+
+Run `spack config scopes -p` to see which system Spack chose; its folder appears as a `compass-<system>` scope. To add a system, add its folder and an entry in `system_externals/include.yaml`.
+
+Earlier versions of the setup script copied a system's `packages.yaml` into `~/.spack/$CLUSTER` and added `export SPACK_USER_CONFIG_PATH=$HOME/.spack/$CLUSTER` to your profile. That variable moves your user scope, so Spack would not read `~/.spack/include.yaml`, and the copied file would override the included one. Remove the line from your profile, log in again, and rerun the script with `-R`; any settings of your own in `~/.spack/$CLUSTER` move to `~/.spack`.
+
+Currently, the following systems are available:
 - Dane
 - Tuolumne
 - Easley (UNM CARC), which upstreams to CARC's Spack installation

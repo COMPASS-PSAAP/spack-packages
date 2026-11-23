@@ -1,13 +1,10 @@
 # Easley packages.yaml
-# Version 1.0
+# Version 1.1
 #
 # CARC's own Spack installation supplies Easley's compilers, CUDA, MPI,
-# and HDF5, so this file names no externals. Point your Spack at it as an
-# upstream in ~/.spack/upstreams.yaml instead:
-#
-#   upstreams:
-#     carc-spack:
-#       install_tree: /opt/spack/opt/spack
+# and HDF5, so this file names no externals. upstreams.yaml, beside this
+# file, points your Spack at it as an upstream; include.yaml applies both
+# on Easley only.
 packages:
   all:
     providers:
