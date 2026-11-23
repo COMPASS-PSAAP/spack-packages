@@ -1,0 +1,19 @@
+$ srun -N 1 -n 1 -t 00:05:00 bash -c hostname; spack config scopes -p
+srun: job 1449730 queued and waiting for resources
+srun: job 1449730 has been allocated resources
+To request GPUs, add --gpus-per-node X or --gpus X, where X is the desired number of GPUs.
+Job 1449730 running on easley017
+easley017
+Scope                                                             Path
+command_line                                                       
+spack                                                             /users/bridges/spack/etc/spack/
+user                                                              /users/bridges/.system-check.kuGehT/user/
+user:/users/bridges/spack-packages/system_externals/include.yaml  /users/bridges/spack-packages/system_externals/include.yaml
+compass-easley                                                    /users/bridges/spack-packages/system_externals/easley/
+site                                                              /users/bridges/spack/etc/spack/site/
+system                                                            /etc/spack/
+defaults                                                          /users/bridges/spack/etc/spack/defaults/
+defaults:linux                                                    /users/bridges/spack/etc/spack/defaults/linux/
+defaults:base                                                     /users/bridges/spack/etc/spack/defaults/base/
+_builtin                                                           
+
