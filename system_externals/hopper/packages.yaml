@@ -1,0 +1,8 @@
+# Hopper packages.yaml
+# Version 1.0
+#
+# CARC's own Spack installation supplies Hopper's compilers, CUDA, MPI,
+# and HDF5, so this file names no externals. upstreams.yaml, beside this
+# file, points your Spack at it as an upstream; include.yaml applies both
+# on Hopper only.
+packages: {}

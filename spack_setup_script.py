@@ -4,7 +4,6 @@ import argparse
 import os
 import sys
 import shutil
-import hashlib
 import subprocess
 from pathlib import Path
 
@@ -15,13 +14,6 @@ green = "\033[92m"
 blue = "\033[94m"
 
 
-def get_sha1(filepath):
-    """Calculate the SHA1 hash of a file."""
-    h = hashlib.sha1()
-    h.update(filepath.read_bytes())
-    return h.hexdigest()
-
-
 def main():
     # 1. Parse command-line arguments
     parser = argparse.ArgumentParser(
@@ -30,11 +22,9 @@ def main():
         epilog="""\
 Notes:
   -R: It is a good idea to check in all code in "spack develop" before running this command!
-  -S: This is destructive and will override any local adjustments to your system packages and/or repo package.yaml files!
-  -E: This command is currently setup to add a LLNL specific command to the provided file. If not on an LLNL machine, please
-      remove this line (or set the appropriate variable to the file).
-      This command also wants the path to the file from $HOME, not the current directory.
-  -C with -E: Will not write "export SPACK_USER_CONFIG_PATH=< >" to the specified file.
+  -R: Also includes system_externals/include.yaml from your Spack user scope, which applies each
+      supported system's configuration on that system only. Set COMPASS_SYSTEM to choose a system by hand.
+  -E: This command wants the path to the file from $HOME, not the current directory.
   -R, -E: These options require Spack to be available in the environment.
 """,
     )
@@ -47,14 +37,9 @@ Notes:
         help="Install custom CUP-ECS and COMPASS Spack package repositories.",
     )
     parser.add_argument(
-        "-C",
-        action="store_true",
-        help="Use SPACK_USER_CONFIG_PATH environment variable for install location of the system packages file.",
-    )
-    parser.add_argument(
         "-S",
         dest="system",
-        help='The name of the cluster to setup files for. For example, "-S $CLUSTER" ',
+        help="No longer needed: Spack now detects the system. Set COMPASS_SYSTEM to choose one by hand.",
     )
     parser.add_argument(
         "-E",
@@ -65,84 +50,32 @@ Notes:
     args = parser.parse_args()
 
     profile_file = args.profile_file
-    cluster = args.system or os.environ.get("CLUSTER")
+    home = Path.home()
+
+    if args.system:
+        print(
+            f"{blue}-S is no longer needed: Spack detects the system. Set COMPASS_SYSTEM to choose one by hand.{black}"
+        )
 
     # 2. Update git repository
     if args.U:
         print(f"{blue}Pulling latest code:{black}")
         subprocess.run(["git", "pull"], check=True)
 
-    # 3. Check for CLUSTER availability
-    if not cluster:
-        print(f"{red}No system specified -- exiting.{black}")
-        sys.exit(1)
-
-    cwd = Path.cwd()
-    cluster_dir = cwd / "system_externals" / cluster
-
-    # 4. Check if we know about the cluster
-    if not cluster_dir.is_dir():
-        print(f"{red}No packages for system -- exiting.{black}")
-        sys.exit(1)
-
-    # 5. Setup install directories
-    install_file = cluster_dir / "packages.yaml"
-    home = Path.home()
-    # 5a. Determine location to install to
-    if args.C:
-        env_config_path = os.environ.get("SPACK_USER_CONFIG_PATH")
-        if not env_config_path:
-            print(
-                f"{red}-C flag provided, but SPACK_USER_CONFIG_PATH is not set in the environment -- exiting.{black}"
-            )
-            sys.exit(1)
-        install_location = Path(env_config_path)
-    else:
-        install_location = home / ".spack" / cluster
-
-    if not install_location.is_dir():
-        print(
-            f"{green}Making folder for {cluster} external/system packages at {install_location}{black}"
-        )
-        install_location.mkdir(parents=True, exist_ok=True)
-
-    # 6. Install system-specific packages.yaml
-    target_file = install_location / "packages.yaml"
-    need_new_file = False
-
-    # 6a. Check if file is present and needs updating
-    if target_file.is_file():
-        hash1 = get_sha1(install_file)
-        hash2 = get_sha1(target_file)
-        if hash1 != hash2:
-            print(
-                f"{blue}Current packages file ({target_file}) does not match repo, will replace{black}"
-            )
-            need_new_file = True
-    else:
-        need_new_file = True
-
-    # 6b. Install the package file, if needed
-    if need_new_file:
-        print(f"{green}Installing {install_file} to {install_location}{black}")
-        shutil.copy2(install_file, install_location)
-    else:
-        print(f'{blue}No new "package.yaml" file installed.{black}')
-
-    # 7. Stop here if Spack-specific actions are not requested
+    # 3. Stop here if Spack-specific actions are not requested
     if not (args.R or bool(profile_file)):
         sys.exit(0)
 
-    # 8. Check for Spack installation
+    # 4. Check for Spack installation
     spack_exe = shutil.which("spack")
     if not spack_exe:
         print(f"{red}No spack installed -- stopping{black}")
         sys.exit(1)
 
-    # 8b Get true path
+    # 4b Get true path
     full_path = spack_exe.replace("bin/spack", "share/spack/setup-env.sh")
 
-    # 9. Setup Spack repositories
+    # 5. Setup Spack repositories
     if args.U and args.R:
         print(f"{green}Updating external COMPASS Spack repositories:{black}")
         subprocess.run(
@@ -163,7 +96,11 @@ Notes:
             stderr=subprocess.DEVNULL,
         )
 
-    # 10. Modify user profile
+    # 6. Include the system configuration from the user scope
+    if args.R:
+        install_system_include(home)
+
+    # 7. Modify user profile
     if profile_file:
         profile_path = home / profile_file
         if not profile_path.is_file():
@@ -172,10 +109,6 @@ Notes:
 
         # Structure strings to add alongside any flags that should cause them to be skipped
         strings_to_process = [
-            {
-                "text": "export SPACK_USER_CONFIG_PATH=$HOME/.spack/$CLUSTER",
-                "conflicts_with": [args.C],  # Skips if -C is True
-            },
             {
                 "text": f"source {full_path}",
                 "conflicts_with": [],  # Always writes if -E is used
@@ -204,6 +137,48 @@ Notes:
                 print(
                     f'{blue}"{string_to_add}" already present in requested file. Skipping.{black}'
                 )
+
+
+def install_system_include(home):
+    """Include system_externals/include.yaml, from the copy of this repository
+    that Spack keeps up to date, in the Spack user scope."""
+    include_path = "~/.spack/package_repos/COMPASS/system_externals/include.yaml"
+    # Spack fails on every command when a required include is missing, as it
+    # is in a copy cloned before this file existed
+    if not Path(include_path).expanduser().is_file():
+        print(
+            f"{red}{include_path} does not exist; update the repository with -U -R, then rerun -R.{black}"
+        )
+        sys.exit(1)
+    config_path = os.environ.get("SPACK_USER_CONFIG_PATH")
+    user_scope = Path(config_path) if config_path else home / ".spack"
+
+    # Earlier versions of this script copied a system's packages.yaml into
+    # ~/.spack/$CLUSTER and pointed SPACK_USER_CONFIG_PATH there. That copy
+    # sits above the include and would override it with stale settings.
+    if config_path:
+        print(
+            f"{red}SPACK_USER_CONFIG_PATH is set to {config_path}. Earlier versions of this script set it to "
+            f"$HOME/.spack/$CLUSTER; if so, remove that line from your profile, log in again, and rerun -R.{black}"
+        )
+        if (user_scope / "packages.yaml").is_file():
+            print(
+                f"{red}{user_scope / 'packages.yaml'} may be a copy of a system's packages.yaml from an "
+                f"earlier version of this script; it would override the included one.{black}"
+            )
+
+    include_file = user_scope / "include.yaml"
+    if not include_file.is_file():
+        user_scope.mkdir(parents=True, exist_ok=True)
+        print(f"{green}Including the COMPASS system configuration from {include_file}{black}")
+        include_file.write_text(f"include:\n- path: {include_path}\n")
+    elif include_path in include_file.read_text():
+        print(f"{blue}{include_file} already includes the COMPASS system configuration.{black}")
+    else:
+        print(
+            f"{red}{include_file} exists; add this entry to its include list by hand:{black}\n"
+            f"- path: {include_path}"
+        )
 
 
 if __name__ == "__main__":
