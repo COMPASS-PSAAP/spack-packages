@@ -83,4 +83,5 @@ Earlier versions of the setup script copied a system's `packages.yaml` into `~/.
 Currently, the following systems are available:
 - Dane
 - Tuolumne
-- Easley (UNM CARC), which upstreams to CARC's Spack installation- Hopper (UNM CARC), a placeholder until it is checked
+- Easley (UNM CARC), which upstreams to CARC's Spack installation
+- Hopper (UNM CARC), which upstreams to CARC's Spack installation
