@@ -20,3 +20,8 @@ include:
 - name: compass-easley
   path: easley
   when: env.get("COMPASS_SYSTEM") == "easley" or ("COMPASS_SYSTEM" not in env and re.match(r"easley\d*(\.|$)", hostname))
+# UNM CARC's Hopper: the login node is "hopper" and compute nodes are
+# "hopper001" and up
+- name: compass-hopper
+  path: hopper
+  when: env.get("COMPASS_SYSTEM") == "hopper" or ("COMPASS_SYSTEM" not in env and re.match(r"hopper\d*(\.|$)", hostname))

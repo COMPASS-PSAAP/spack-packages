@@ -1,0 +1,7 @@
+# Hopper packages.yaml
+# Version 0.1
+#
+# A placeholder that names nothing, so Spack's choice of Hopper can be
+# checked before Hopper's externals or upstream are known. It is filled
+# in from tmp-carc-check's results on Hopper.
+packages: {}
