@@ -1,0 +1,114 @@
+#!/bin/bash
+# Run one request on an HPC system, record its environment and output, and
+# commit the results. A human runs this, after reading request.md and run.sh.
+#
+# Usage: working/bin/run-request [--no-push] working/requests/<name>
+#
+# Runs run.sh from the repository root with RESULTS_DIR set to the request's
+# results/ directory, which run.sh copies its artifacts into. Files over
+# 1 MiB are compressed; any still too large move to
+# ~/<repository>-oversize/<name>/, where <repository> is the name
+# of the checkout, and are listed in the manifest, not committed.
+set -euo pipefail
+
+die() {
+  echo "run-request: $*" >&2
+  exit 1
+}
+
+limit=1048576
+push=1
+if [ "${1:-}" = --no-push ]; then
+  push=0
+  shift
+fi
+[ $# -eq 1 ] || die "usage: working/bin/run-request [--no-push] working/requests/<name>"
+[ -d "$1" ] || die "no such directory: $1"
+
+root=$(git rev-parse --show-toplevel)
+req=$(cd "$1" && pwd -P)
+root=$(cd "$root" && pwd -P)
+case "$req" in
+"$root"/working/requests/*) ;;
+*) die "not a request directory: $1" ;;
+esac
+name=$(basename "$req")
+[ -f "$req/request.md" ] && [ -f "$req/run.sh" ] || die "$name lacks request.md or run.sh"
+results="$req/results"
+[ ! -e "$results" ] || die "$name has already run; ask for a new request instead"
+
+# The manifest names a commit, so the commit must be exactly what runs and
+# must be on the remote for the agent to see it
+[ -z "$(git -C "$root" status --porcelain)" ] ||
+  die "the checkout has uncommitted or untracked changes; commit or remove them"
+commit=$(git -C "$root" rev-parse HEAD)
+branch=$(git -C "$root" rev-parse --abbrev-ref HEAD)
+git -C "$root" fetch -q origin
+[ -n "$(git -C "$root" branch -r --contains "$commit")" ] ||
+  die "commit $commit is not on origin; pull or push first"
+# An agent may have revised the request since this checkout was pulled
+if git -C "$root" rev-parse -q --verify "origin/$branch" >/dev/null; then
+  behind=$(git -C "$root" rev-list --count "HEAD..origin/$branch")
+  [ "$behind" -eq 0 ] ||
+    die "the checkout is $behind commit(s) behind origin/$branch; pull first"
+fi
+
+mkdir -p "$results"
+started=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+start_s=$(date +%s)
+
+set +e
+(cd "$root" && RESULTS_DIR="$results" bash "$req/run.sh") 2>&1 | tee "$results/stdout.log"
+run_status=${PIPESTATUS[0]}
+set -e
+elapsed=$(($(date +%s) - start_s))
+
+oversize=""
+while IFS= read -r file; do
+  if [ "$(wc -c <"$file")" -gt "$limit" ]; then
+    gzip -9 "$file"
+    file="$file.gz"
+  fi
+  if [ "$(wc -c <"$file")" -gt "$limit" ]; then
+    dest="$HOME/$(basename "$root")-oversize/$name/${file#"$results"/}"
+    mkdir -p "$(dirname "$dest")"
+    mv "$file" "$dest"
+    oversize="$oversize- \`$dest\`
+"
+  fi
+done < <(find "$results" -type f)
+
+{
+  echo "# Run manifest: $name"
+  echo
+  echo "- **Commit:** \`$commit\` on \`$branch\`"
+  echo "- **Host:** \`$(hostname)\`"
+  echo "- **Started:** $started"
+  echo "- **Elapsed:** ${elapsed} s"
+  echo "- **Exit status of run.sh:** $run_status"
+  if command -v spack >/dev/null 2>&1; then
+    echo "- **Spack:** \`$(spack --version 2>&1)\`"
+  fi
+  if [ -n "$oversize" ]; then
+    echo
+    echo "## Files over the 1 MiB limit, kept on the machine"
+    echo
+    printf '%s' "$oversize"
+  fi
+  echo
+  echo "## Environment"
+  echo
+  echo '```'
+  # An allowlist, never the whole environment, which can hold tokens
+  env | grep -E '^(HSA|HIP|ROCM|AMD|MPICH|CRAY|PE|SPACK|FLUX|SLURM|OMP|KOKKOS)_|^(LOADEDMODULES|LD_LIBRARY_PATH)=' |
+    grep -Ev 'TOKEN|SECRET|PASSWORD|KEY' | sort || true
+  echo '```'
+} >"$results/manifest.md"
+
+git -C "$root" add -- "$results"
+git -C "$root" commit -q -m "Results for $name on $(hostname -s)" -- "$results"
+echo "run-request: committed results for $name (run.sh exited $run_status)"
+if [ "$push" -eq 1 ]; then
+  git -C "$root" push -q origin "HEAD:$branch"
+  echo "run-request: pushed to origin/$branch"
+fi

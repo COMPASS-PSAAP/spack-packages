@@ -1,0 +1,34 @@
+#!/bin/bash
+# Check the exchange area in working/.
+#
+# Usage: working/bin/check [--merge]
+#
+# Always: every tracked file under working/requests/ is at most 1 MiB.
+# --merge: working/ holds only the skeleton, as a pull request into
+# the default branch must. Run it before opening such a pull request.
+set -euo pipefail
+
+limit=1048576
+skeleton='^working/(README\.md|bin/[^/]+|template/[^/]+)$'
+
+cd "$(git rev-parse --show-toplevel)"
+status=0
+
+while IFS= read -r -d '' file; do
+  size=$(($(wc -c <"$file")))
+  if [ "$size" -gt "$limit" ]; then
+    echo "check: $file is $size bytes; the limit is $limit" >&2
+    status=1
+  fi
+done < <(git ls-files -z -- working/requests)
+
+if [ "${1:-}" = --merge ]; then
+  extra=$(git ls-files -- working | grep -Ev "$skeleton" || true)
+  if [ -n "$extra" ]; then
+    echo "check: only the skeleton of working/ may merge; remove these first:" >&2
+    echo "$extra" | sed 's/^/  /' >&2
+    status=1
+  fi
+fi
+
+exit "$status"

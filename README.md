@@ -85,3 +85,13 @@ Currently, the following systems are available:
 - Tuolumne
 - Easley (UNM CARC), which upstreams to CARC's Spack installation
 - Hopper (UNM CARC), which upstreams to CARC's Spack installation
+
+## Testing on HPC Systems
+
+Agents may not run on LLNL systems or on Easley, so a check of a change
+there goes through `working/`, the exchange from
+`COMPASS-PSAAP/compass-template`: an agent writes a request on a feature
+branch, and a person runs it with `working/bin/run-request`, which commits
+the results to the branch. `working/README.md` describes the protocol.
+Requests never reach `main`; remove them and squash-merge, as that file
+says.
