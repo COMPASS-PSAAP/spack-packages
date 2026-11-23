@@ -52,9 +52,11 @@ print("database version", d["version"], "with", len(d["installs"]), "installs")'
   run hostname
   run hostname -f
   run uname -a
+  # Whether a login shell sets CLUSTER, and whether it exports it
+  run bash -lc 'declare -p CLUSTER'
   run cat /etc/os-release
-  echo "\$ env | grep -E 'CLUSTER|CARC|LMOD_SYSTEM|SLURM_CONF'"
-  env | grep -E 'CLUSTER|CARC|LMOD_SYSTEM|SLURM_CONF'
+  echo "\$ env | grep -E 'CLUSTER|SYS_TYPE|CARC|LMOD_SYSTEM|SLURM_CONF'"
+  env | grep -E 'CLUSTER|SYS_TYPE|CARC|LMOD_SYSTEM|SLURM_CONF'
   echo
   run lscpu
   run nvidia-smi --query-gpu=name,compute_cap,driver_version --format=csv

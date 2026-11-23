@@ -4,17 +4,21 @@
 # several clusters gets the right configuration on each. Paths are
 # relative to this file.
 #
-# Each entry names its system three ways, in this order: COMPASS_SYSTEM,
-# which anyone can set to choose a system by hand; CLUSTER, which LLNL
-# sets on its machines; and, where a system has neither, a pattern on
-# its hostnames.
+# Each entry names its system two ways: COMPASS_SYSTEM, which anyone can
+# set to choose a system by hand, and otherwise a pattern on its
+# hostnames. An earlier version used CLUSTER on LLNL systems, but CLUSTER
+# was not in the environment of a script run from a Tuolumne login shell
+# on 2026-11-23, so Spack, which reads os.environ, would not see it
+# either.
 include:
+# LLNL's Dane and Tuolumne: nodes are named "dane<number>" and
+# "tuolumne<number>", such as "tuolumne2152"
 - name: compass-dane
   path: dane
-  when: env.get("COMPASS_SYSTEM", env.get("CLUSTER")) == "dane"
+  when: env.get("COMPASS_SYSTEM") == "dane" or ("COMPASS_SYSTEM" not in env and re.match(r"dane\d*(\.|$)", hostname))
 - name: compass-tuolumne
   path: tuolumne
-  when: env.get("COMPASS_SYSTEM", env.get("CLUSTER")) == "tuolumne"
+  when: env.get("COMPASS_SYSTEM") == "tuolumne" or ("COMPASS_SYSTEM" not in env and re.match(r"tuolumne\d*(\.|$)", hostname))
 # UNM CARC's Easley: the login node is "easley" and compute nodes are
 # "easley001" and up
 - name: compass-easley

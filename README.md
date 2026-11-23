@@ -73,8 +73,7 @@ This repository is also home to the collection of Spack configuration for each s
 
 `system_externals/include.yaml` includes each system's folder on that system only, and `-R`, or step 6 of the manual setup, includes it from your user scope. Spack evaluates its conditions every time it starts, so a home directory shared by several clusters gets the right configuration on each, and `spack repo update COMPASSRepo` (or `-U -R`) updates it along with the packages. Each system is recognized from, in order:
 - `COMPASS_SYSTEM`, which you can set to a folder name to choose a system by hand
-- `CLUSTER`, which LLNL sets on its machines
-- a pattern on the system's hostnames, for systems that set neither
+- otherwise, a pattern on the system's hostnames
 
 Run `spack config scopes -p` to see which system Spack chose; its folder appears as a `compass-<system>` scope. To add a system, add its folder and an entry in `system_externals/include.yaml`.
 
