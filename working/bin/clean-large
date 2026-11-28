@@ -1,0 +1,45 @@
+#!/bin/bash
+# Delete a retired branch's large files from this machine's large-file
+# store. A human runs this on each machine that ran the branch's requests,
+# after promoting what should be kept and pushing it.
+#
+# Usage: working/bin/clean-large [--delete] <branch>
+#
+# Lists the files in the branch's directory in the store, which
+# working/bin/large-store names; with --delete, deletes the directory.
+# Promoted large files are safe in Git LFS; the rest are gone for good.
+set -euo pipefail
+
+die() {
+  echo "clean-large: $*" >&2
+  exit 1
+}
+
+delete=0
+if [ "${1:-}" = --delete ]; then
+  delete=1
+  shift
+fi
+[ $# -eq 1 ] || die "usage: working/bin/clean-large [--delete] <branch>"
+
+root=$(git rev-parse --show-toplevel)
+dir=$("$root/working/bin/large-store" "$1")
+if [ ! -d "$dir" ]; then
+  echo "clean-large: nothing stored for $1 in $dir"
+  exit 0
+fi
+
+find "$dir" -type f | sort
+du -sh "$dir"
+if [ "$delete" -eq 0 ]; then
+  echo "clean-large: run again with --delete to delete $dir"
+  exit 0
+fi
+
+# A promotion committed here but not pushed has not uploaded its large files
+if git -C "$root" rev-parse -q --verify '@{upstream}' &>/dev/null; then
+  [ "$(git -C "$root" rev-list --count '@{upstream}..HEAD')" -eq 0 ] ||
+    die "this checkout has commits not on its upstream; push them first"
+fi
+rm -rf -- "$dir"
+echo "clean-large: deleted $dir"

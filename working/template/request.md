@@ -1,9 +1,11 @@
 # Request: <name>
 
 - **Asked for by:** <agent or person>, <date>
-- **Machine:** <Tuolumne, Dane, Tioga, Easley, or a workstation>
+- **Issue:** <#number of the research question this run helps answer>
+- **Machine:** <Tuolumne, Dane, Tioga, Easley, Hopper, or a workstation>
 - **Allocation:** <for example `flux alloc -N1 -t 1h`, or "login node">
 - **Expected cost:** <node-hours>
+- **Expected large output:** <total size left in `$LARGE_DIR`, or "none">
 - **Depends on:** <other repositories and branches the run builds, if any>
 
 ## Why
