@@ -3,7 +3,10 @@
 #
 # Usage: working/bin/check [--merge]
 #
-# Always: every tracked file under working/requests/ is at most 1 MiB.
+# Always: every file under working/requests/ and results/ is at most 1 MiB
+# as git stores it, so a larger file in results/ must be in Git LFS, which
+# stores a small pointer in its place; and no request has both run and been
+# rejected.
 # --merge: working/ holds only the skeleton, as a pull request into
 # the default branch must. Run it before opening such a pull request.
 set -euo pipefail
@@ -14,13 +17,21 @@ skeleton='^working/(README\.md|bin/[^/]+|template/[^/]+)$'
 cd "$(git rev-parse --show-toplevel)"
 status=0
 
-while IFS= read -r -d '' file; do
-  size=$(($(wc -c <"$file")))
+while IFS=$'\t' read -r -d '' info file; do
+  size=$(git cat-file -s "$(echo "$info" | cut -d' ' -f2)")
   if [ "$size" -gt "$limit" ]; then
-    echo "check: $file is $size bytes; the limit is $limit" >&2
+    echo "check: $file is $size bytes in git; the limit is $limit" >&2
     status=1
   fi
-done < <(git ls-files -z -- working/requests)
+done < <(git ls-files -s -z -- working/requests results)
+
+while IFS= read -r response; do
+  req=${response%/response.md}
+  if [ -n "$(git ls-files -- "$req/results")" ]; then
+    echo "check: $req has both results/ and response.md" >&2
+    status=1
+  fi
+done < <(git ls-files -- 'working/requests/*/response.md')
 
 if [ "${1:-}" = --merge ]; then
   extra=$(git ls-files -- working | grep -Ev "$skeleton" || true)

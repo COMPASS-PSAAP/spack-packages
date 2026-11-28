@@ -5,10 +5,14 @@
 # Usage: working/bin/run-request [--no-push] working/requests/<name>
 #
 # Runs run.sh from the repository root with RESULTS_DIR set to the request's
-# results/ directory, which run.sh copies its artifacts into. Files over
-# 1 MiB are compressed; any still too large move to
-# ~/<repository>-oversize/<name>/, where <repository> is the name
-# of the checkout, and are listed in the manifest, not committed.
+# results/ directory, which run.sh copies its artifacts into, and LARGE_DIR
+# set to the request's directory in the large-file store on this machine,
+# which working/bin/large-store names. Files in results/ over 1 MiB are
+# compressed; any still too large move to LARGE_DIR. Files in LARGE_DIR
+# stay on the machine; the manifest lists them, and results/large.sha256
+# records their SHA-256 sums. The host's shared group, from large-store,
+# can read, change, and delete them, so another person can promote or
+# clean them up.
 set -euo pipefail
 
 die() {
@@ -36,6 +40,7 @@ name=$(basename "$req")
 [ -f "$req/request.md" ] && [ -f "$req/run.sh" ] || die "$name lacks request.md or run.sh"
 results="$req/results"
 [ ! -e "$results" ] || die "$name has already run; ask for a new request instead"
+[ ! -e "$req/response.md" ] || die "$name was rejected; see its response.md"
 
 # The manifest names a commit, so the commit must be exactly what runs and
 # must be on the remote for the agent to see it
@@ -52,31 +57,54 @@ if git -C "$root" rev-parse -q --verify "origin/$branch" >/dev/null; then
   [ "$behind" -eq 0 ] ||
     die "the checkout is $behind commit(s) behind origin/$branch; pull first"
 fi
+large="$("$root/working/bin/large-store")/$name"
+[ ! -e "$large" ] ||
+  die "$large exists from an earlier, unfinished run; remove it or ask for a new request"
 
+group=$("$root/working/bin/large-store" --group)
+[ -n "$group" ] ||
+  echo "run-request: warning: no shared group for $(hostname -s) in working/bin/large-store; only you can clean up $large" >&2
+store=$(dirname "$(dirname "$(dirname "$large")")")
+[ -d "$store" ] || die "the large-file store $store does not exist"
+# Share each store directory this run creates, and what run.sh writes
+umask 0002
+for dir in "$(dirname "$(dirname "$large")")" "$(dirname "$large")" "$large"; do
+  [ -d "$dir" ] && continue
+  mkdir "$dir"
+  [ -z "$group" ] || chgrp "$group" "$dir"
+  chmod g+rwxs "$dir"
+done
 mkdir -p "$results"
 started=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 start_s=$(date +%s)
 
 set +e
-(cd "$root" && RESULTS_DIR="$results" bash "$req/run.sh") 2>&1 | tee "$results/stdout.log"
+(cd "$root" && RESULTS_DIR="$results" LARGE_DIR="$large" bash "$req/run.sh") 2>&1 | tee "$results/stdout.log"
 run_status=${PIPESTATUS[0]}
 set -e
 elapsed=$(($(date +%s) - start_s))
 
-oversize=""
 while IFS= read -r file; do
   if [ "$(wc -c <"$file")" -gt "$limit" ]; then
     gzip -9 "$file"
     file="$file.gz"
   fi
   if [ "$(wc -c <"$file")" -gt "$limit" ]; then
-    dest="$HOME/$(basename "$root")-oversize/$name/${file#"$results"/}"
+    dest="$large/${file#"$results"/}"
     mkdir -p "$(dirname "$dest")"
     mv "$file" "$dest"
-    oversize="$oversize- \`$dest\`
-"
   fi
 done < <(find "$results" -type f)
+
+(cd "$large" && find . -type f -exec sha256sum {} + | sed 's|  \./|  |' | sort -k 2) \
+  >"$results/large.sha256"
+if [ ! -s "$results/large.sha256" ]; then
+  rm "$results/large.sha256"
+  rm -r "$large"
+elif [ -n "$group" ]; then
+  chgrp -R "$group" "$large"
+  chmod -R g+rwX "$large"
+fi
 
 {
   echo "# Run manifest: $name"
@@ -89,11 +117,17 @@ done < <(find "$results" -type f)
   if command -v spack >/dev/null 2>&1; then
     echo "- **Spack:** \`$(spack --version 2>&1)\`"
   fi
-  if [ -n "$oversize" ]; then
+  if [ -e "$results/large.sha256" ]; then
     echo
-    echo "## Files over the 1 MiB limit, kept on the machine"
+    echo "## Large files, kept on the machine"
     echo
-    printf '%s' "$oversize"
+    echo "In \`$large\`; \`large.sha256\` holds their SHA-256 sums."
+    echo
+    echo "| File | Bytes |"
+    echo "|---|---|"
+    while read -r _ file; do
+      echo "| \`$file\` | $(($(wc -c <"$large/$file"))) |"
+    done <"$results/large.sha256"
   fi
   echo
   echo "## Environment"

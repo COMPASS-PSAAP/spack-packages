@@ -1,0 +1,29 @@
+#!/bin/bash
+# Reject a request that has not run, by creating its response.md from
+# working/template/. The inspector fills it in, commits it, and pushes.
+#
+# Usage: working/bin/respond working/requests/<name>
+set -euo pipefail
+
+die() {
+  echo "respond: $*" >&2
+  exit 1
+}
+
+[ $# -eq 1 ] || die "usage: working/bin/respond working/requests/<name>"
+[ -d "$1" ] || die "no such directory: $1"
+
+root=$(cd "$(git rev-parse --show-toplevel)" && pwd -P)
+req=$(cd "$1" && pwd -P)
+case "$req" in
+"$root"/working/requests/*) ;;
+*) die "not a request directory: $1" ;;
+esac
+name=$(basename "$req")
+[ -f "$req/request.md" ] || die "$name lacks request.md"
+[ ! -e "$req/results" ] || die "$name has already run; it can no longer be rejected"
+[ ! -e "$req/response.md" ] || die "$name already has a response"
+
+sed "s/<name>/$name/g; s/<date>/$(date +%Y-%m-%d)/g" \
+  "$root/working/template/response.md" >"$req/response.md"
+echo "working/requests/$name/response.md"

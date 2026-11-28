@@ -1,0 +1,40 @@
+#!/bin/bash
+# Print the directory that holds a branch's large files on this host, or
+# the UNIX group that shares them.
+#
+# Usage: working/bin/large-store [<branch>]
+#        working/bin/large-store --group
+#
+# Prints <store>/<repository>/<branch>, where the table below maps the
+# host to <store>, <repository> is the name of the repository on origin,
+# and <branch> defaults to the current branch, with each "/" in its name
+# replaced by "--". With --group, prints the host's shared group, or
+# nothing where the table has none yet. Set LARGE_STORE and LARGE_GROUP to
+# use another store and group, for example on a workstation or in a test.
+set -euo pipefail
+
+die() {
+  echo "large-store: $*" >&2
+  exit 1
+}
+
+[ $# -le 1 ] || die "usage: working/bin/large-store [<branch> | --group]"
+
+case "$(hostname -s)" in
+dane* | tioga* | tuolumne*) store=/usr/workspace/unm_cs group=unm_cs ;;
+easley* | hopper*) store=/projects/bridges/compass group=compass ;;
+*) store="" group="" ;;
+esac
+LARGE_STORE=${LARGE_STORE:-$store}
+LARGE_GROUP=${LARGE_GROUP:-$group}
+
+if [ "${1:-}" = --group ]; then
+  echo "$LARGE_GROUP"
+  exit 0
+fi
+[ -n "$LARGE_STORE" ] ||
+  die "no large-file store for $(hostname -s); add it to working/bin/large-store or set LARGE_STORE"
+branch=${1:-$(git rev-parse --abbrev-ref HEAD)}
+[ -n "$branch" ] && [ "$branch" != HEAD ] || die "name a branch; HEAD is detached"
+
+echo "$LARGE_STORE/$(basename -s .git "$(git remote get-url origin)")/${branch//\//--}"
